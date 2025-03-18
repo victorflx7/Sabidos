@@ -1,0 +1,20 @@
+:root{
+    --tam:150px;
+}
+
+header{
+    display: flex;
+}
+.controle{
+    display: flex
+;
+    width: 100%;
+    justify-content: flex-end;
+
+}
+.ajust{
+    width: --tam;
+}
+.title{
+    color: #fff;
+}

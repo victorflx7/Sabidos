@@ -1,0 +1,22 @@
+.IconProfile{
+    height: 30px;
+    padding: 10px;
+
+}
+figure{
+    background-color: aliceblue;
+    height: 60px;
+}
+.ProfileModal{
+    height: 300px;
+    background-color: blue;
+    position: absolute;
+    width: 300px;
+    display: none;
+    transform: translate(-90%, 0px);
+}
+.open{
+    display: block;}
+.oi:hover .ProfileModal{
+    display: block;
+}

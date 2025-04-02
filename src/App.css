@@ -1,5 +1,9 @@
-main{
+/* main{
     height: 90vh;
 }
 body{
-background-color: #171621;}
+background-color: #171621;} */
+*{
+  padding: 0;
+  margin: 0;
+}

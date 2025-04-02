@@ -4,6 +4,7 @@
 
 header{
     display: flex;
+    font-family: Arial, Helvetica, sans-serif;
 }
 .controle{
     display: flex

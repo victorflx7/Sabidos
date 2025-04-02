@@ -1,5 +1,5 @@
 import './SlideBar.css'
-import IconX from './icon/react.svg'
+import IconX from './icon/Barras.svg'
 import IconHouse from './icon/House.svg'
 import IconAgend from './icon/Agend.svg'
 import IconPen from './icon/Pen.svg'

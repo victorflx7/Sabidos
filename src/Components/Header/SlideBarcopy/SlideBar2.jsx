@@ -1,5 +1,5 @@
 import './SlideBar2.css'
-import IconX from './icon/react.svg'
+import IconX from './icon/Barras.svg'
 import IconHouse from './icon/House.svg'
 import IconAgend from './icon/Agend.svg'
 import IconPen from './icon/Pen.svg'
@@ -24,6 +24,7 @@ function SlideBar2() {
                   <a ><img src={IconPen} alt="" srcset="" /> Resumos</a>
                   <a > <img src={IconTime} alt="" srcset="" /> Pomodoro</a>
                   <a > <img src={IconCard} alt="" srcset="" /> Flashcards</a>
+                  
                   <a href=""></a>
                   <a href=""></a>
                   

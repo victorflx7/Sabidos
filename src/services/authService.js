@@ -1,28 +1,48 @@
 import { 
-    getAuth, 
-    createUserWithEmailAndPassword, 
-    signInWithEmailAndPassword,
-    sendPasswordResetEmail,
-    sendEmailVerification
-  } from "firebase/auth";
-  import { app } from '../firebase/config';
-  
-  const auth = getAuth(app);
-  
-  // Cadastro
-  export const cadastrarUsuario = async (email, senha) => {
+  getAuth, 
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword,
+  updateProfile
+} from "firebase/auth";
+import { app } from '../firebase/config';
+
+const auth = getAuth(app);
+
+export const cadastrarUsuario = async (nome, email, senha) => {
+  try {
     const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
-    await sendEmailVerification(userCredential.user); // Opcional: envia confirmação
-    return userCredential.user;
-  };
-  
-  // Login
-  export const fazerLogin = async (email, senha) => {
+    
+    await updateProfile(userCredential.user, {
+      displayName: nome
+    });
+
+      
+    // 3. Envia email de verificação (opcional)
+  //  await sendEmailVerification(userCredential.user);
+
+    return { 
+      success: true,
+      user: userCredential.user 
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error.message
+    };
+  }
+};
+
+export const fazerLogin = async (email, senha) => {
+  try {
     const userCredential = await signInWithEmailAndPassword(auth, email, senha);
-    return userCredential.user;
-  };
-  
-  // Recuperar senha
-  export const resetarSenha = async (email) => {
-    await sendPasswordResetEmail(auth, email);
-  };
+    return {
+      success: true,
+      user: userCredential.user
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error.message
+    };
+  }
+};

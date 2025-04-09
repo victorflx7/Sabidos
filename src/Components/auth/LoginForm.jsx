@@ -1,41 +1,84 @@
 import React, { useState } from 'react';
 import { fazerLogin } from '../../services/authService';
 import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+
+import './login.css'
 
 function Login() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
+    const navigate = useNavigate();
+    const [loading, setLoading] = useState(false);
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     try {
-      await fazerLogin(email, senha);
+      const result =  await fazerLogin(email, senha);
       // Redireciona após login (use navigate ou estado global)
+      if (result.success) {
+        alert('Login realizado com sucesso!');
+        navigate('/dashboard'); // Redireciona para página interna
+      } else {
+        setErro(result.error);
+      }
     } catch (error) {
       setErro("Falha no login: " + error.message);
     }
   };
 
-  return (
-    <form onSubmit={handleSubmit}>
-      <input 
-        type="email" 
-        value={email} 
-        onChange={(e) => setEmail(e.target.value)} 
-        placeholder="Email" 
-      />
-      <input 
-        type="password" 
-        value={senha} 
-        onChange={(e) => setSenha(e.target.value)} 
-        placeholder="Senha" 
-      />
-      <button type="submit">Entrar</button>
+return (
+  
+     <div className="login-container">
+      <header className="headerL">
+        <img className="logoL" src="../assets/LogoLogin.svg"  alt="logoExtensa" width="409px" height="153px" />
+      </header>
+      <nav>
+        <a id="b1" className="luz">Login</a>
+        <Link to="/cadastro" id="b2">Cadastro</Link>
+      </nav>
+
+    
+
+      <main id="login" >
+        <div id="d1">
+          <form onSubmit={handleSubmit} className='formlog'>
+            <input className="inputL" type="text" placeholder="Usuario" />
+            <input className="inputL" type="email" name="" id="" placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} />
+            <input className="inputL" type="password" name="password" id="password" placeholder="Senha"  value={senha} onChange={(e) => setSenha(e.target.value)}  />
+        
+        
+          <button type="submit" className="buttonLL"disabled={loading}>
+         {loading ? 'Entrando....'  : 'Entrar'}
+            </button>
       {erro && <p className="erro">{erro}</p>}
-      <Link to="/cadastro">Criar conta</Link>
-    </form>
-  );
+          </form>
+        </div>
+        
+        <div id="d3-log">
+          <input id="check checkbox2" type="checkbox" name=""  />
+          <label htmlFor="checkbox2">Lembra conta</label>
+        </div>
+        <div id="d4-log">
+          <p id="p">Ainda não possui uma conta?</p>
+        </div>
+        <div id="d5-log">
+          
+        <Link to="/cadastro" id="a">Cadastre-se</Link>
+
+        </div>
+      </main>
+      
+    </div>
+    
+     
+    
+  )
+
+
 }
 
 export default Login;

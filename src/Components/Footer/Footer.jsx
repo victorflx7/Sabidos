@@ -10,18 +10,18 @@ function Footer() {
   return (
         <>
             <footer >
-            <div class="Redes">
-                    <img src={IconInsta} alt="Logo_Instagram" class="LOGREDES"/>
-                     <img src={IconX} alt="Logo_Twitter_X" class="LOGREDES" />
-                    <img src={IconGithub} alt="Logo_GitHub" class="LOGREDES" />
+            <div className="Redes">
+                    <img src={IconInsta} alt="Logo_Instagram" className="LOGREDES"/>
+                     <img src={IconX} alt="Logo_Twitter_X" className="LOGREDES" />
+                    <img src={IconGithub} alt="Logo_GitHub" className="LOGREDES" />
                  </div>
 
-                 <div class="Centrado">
-                    <p id="pfoo" class="texto Centrado">
+                 <div className="Centrado">
+                    <p id="pfoo" className="texto Centrado">
                         © 2024 Sabidos. Todos os direitos reservados.
                     </p>
                 </div>
-                <div class="List">
+                <div className="List">
                     <ul>
                         <li>item</li>
                         <li>item</li>

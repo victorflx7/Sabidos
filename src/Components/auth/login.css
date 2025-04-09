@@ -1,12 +1,10 @@
 * {
     padding: 0;
     margin: 0;
-    font-family: Inter;
+    font-family: Arial, Helvetica, sans-serif;
 }
 
-* {
-    margin: 0px;
-}
+
 
 .logoL {
     position: relative;
@@ -23,6 +21,7 @@
     position: absolute;
     left: 50%;
     transform: translate(-50%);
+    /* text-align: center; */
 
 }
 
@@ -34,7 +33,7 @@ nav {
     width: 195px;
     left: 50%;
     transform: translate(-50%);
-    padding: 10px 20px 10px 0px;
+    padding: 10px 0px 10px 0px;
     border-radius: 15px 15px 15px 15px;
     
    
@@ -50,22 +49,15 @@ nav a {
 
 .luz {
     color: rgb(0, 0, 0);
-    
     padding: 10px 28px;
     border-radius: 15px 15px 15px 15px;
     background-color: #FBCB4E;
-   
-    
-    
-   
-   
-
 
 }
 
 
 .buttonLL {
-    position: absolute;
+   
 
     width: 267.949px;
     height: 40.576px;
@@ -73,7 +65,7 @@ nav a {
     background: linear-gradient(90deg, rgba(48, 133, 170, 0.88) 0%, rgba(15, 78, 106, 0.88) 100%), #FFFDFD;
     border: none;
     color: rgb(255, 255, 255);
-    font-family: Inter;
+    /* font-family: Inter; */
     font-size: 19.322px;
     font-style: normal;
     font-weight: 700;
@@ -84,11 +76,13 @@ nav a {
 }
 
 
-form {
+.formlog{
     position: relative;
     display: grid;
     margin-top: 30px;
     grid-gap: 17px;
+    justify-items: center;
+
 }
 
 .inputL {
@@ -99,7 +93,6 @@ form {
     background: #D9D9D9;
     color: rgb(0, 0, 0);
     padding-inline-start: 15px;
-    font-family: Inter;
     font-size: 13.336px;
     font-style: normal;
     font-weight: 400;
@@ -141,14 +134,14 @@ label {
     color: #FBCB4E;
 }
 
-#d4 {
+#d4-log {
     position: relative;
     margin-top: 30px;
     text-align: center;
     font-size: 15px;
 }
 
-#d5 {
+#d5-log {
     position: relative;
     margin-top: 10px;
     text-align: center;

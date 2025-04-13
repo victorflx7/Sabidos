@@ -34,8 +34,9 @@ return (
   
      <div className="login-container">
       <header className="headerL">
-        <img className="logoL" src="../assets/LogoLogin.svg"  alt="logoExtensa" width="409px" height="153px" />
+        <img className="logoL" src="LogoLogin.svg"  alt="logoExtensa" width="409px" height="153px" />
       </header>
+      <br />
       <nav>
         <a id="b1" className="luz">Login</a>
         <Link to="/cadastro" id="b2">Cadastro</Link>

@@ -1,15 +1,15 @@
 import React from 'react'
-import './dashboard.css'
+import './ResumoPage.css'
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
-const dashboard = () => {
+const ResumoPage = () => {
   return (
     <>
-      <Header title='Dashboard'/>
+      <Header title='Resumo'/>
       <main></main>
       <Footer></Footer>
     </>
   )
 }
 
-export default dashboard
+export default ResumoPage

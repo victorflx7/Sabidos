@@ -1,15 +1,15 @@
 import React from 'react'
-import './dashboard.css'
+import './AgendaPage.css'
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
-const dashboard = () => {
+const AgendaPage = () => {
   return (
     <>
-      <Header title='Dashboard'/>
+      <Header title='Agenda'/>
       <main></main>
       <Footer></Footer>
     </>
   )
 }
 
-export default dashboard
+export default AgendaPage

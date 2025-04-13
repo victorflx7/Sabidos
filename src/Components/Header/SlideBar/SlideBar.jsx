@@ -1,23 +1,29 @@
 import './SlideBar.css'
-
+import { Link } from 'react-router-dom';
 
 function SlideBar() {
 
     return (
       <>
-             <div class="dropdown nalinha">
+             <div class="drop nalinha">
               <a>
-                <img src="icon/Baras.svg" id="imgbarle1"/></a>
-               {/*   <img  style="margin: 25px 40px 20px 40px;" alt="Menu" id="imgbarle2" class=" desap" />
-                  <img  style="margin: 25px 40px 20px 20px;" alt="Menu" id="imgbarle1" class="" />*/}
-              
+                <img src= './icon/Barras.svg' id="imgbarle01"/></a>
                
-              <div class="dropdown-menu">
-                  <a><img src={IconHouse} alt="" srcset="" />Home</a>
-                  <a ><img src={IconAgend} alt="" srcset="" /> Agenda</a>
-                  <a ><img src={IconPen} alt="" srcset="" /> Resumos</a>
-                  <a > <img src={IconTime} alt="" srcset="" /> Perfil</a>
-                  <a > <img src={IconCard} alt="" srcset="" /> Perfil</a>
+               
+              <div class="dropdownmenu">
+                <div class="drop">
+              <img src='./icon/Barras.svg' id="imgbarle01"/></div>
+              
+                  <a><img src='icon/House.svg' alt="" srcset="" />Home</a>
+                  <Link to="/Agenda"><img src='icon/Agend.svg' alt="" srcset="" /> Agenda</Link>
+                  <Link to="/Resumo"> <img src='icon/Pen.svg' alt="" srcset="" /> Resumos</Link>
+                  <a > <img src='icon/Time.svg' alt="" srcset="" /> Pomodoro</a>
+                  <a > <img src='icon/Cards.svg' alt="" srcset="" /> Flashcards</a>
+                  
+                  <br /><br />
+                  
+                  <a href="">Sobre Nos</a>
+
                   <div class="animated-div">
                       <div class="animated-div2">
                       </div>

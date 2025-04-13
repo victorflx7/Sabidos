@@ -1,10 +1,5 @@
 import './SlideBar.css'
-import IconX from './icon/Barras.svg'
-import IconHouse from './icon/House.svg'
-import IconAgend from './icon/Agend.svg'
-import IconPen from './icon/Pen.svg'
-import IconTime from './icon/Time.svg'
-import IconCard from './icon/Cards.svg'
+
 
 function SlideBar() {
 
@@ -12,7 +7,7 @@ function SlideBar() {
       <>
              <div class="dropdown nalinha">
               <a>
-                <img src={IconX} id="imgbarle1"/></a>
+                <img src="icon/Baras.svg" id="imgbarle1"/></a>
                {/*   <img  style="margin: 25px 40px 20px 40px;" alt="Menu" id="imgbarle2" class=" desap" />
                   <img  style="margin: 25px 40px 20px 20px;" alt="Menu" id="imgbarle1" class="" />*/}
               

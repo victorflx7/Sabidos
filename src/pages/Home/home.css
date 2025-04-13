@@ -1,0 +1,121 @@
+@font-face {
+    font-family:ProductSans;
+    src: url('./ProductSansBold.ttf');
+  }
+.texto1, .texto2, .texto3, .sub, .sublinhado{
+  font-family: 'ProductSans', sans-serif;
+}
+body {
+    margin: 0;
+    padding: 0;
+    background-color: #060423;
+  }
+  
+  .container {
+    height: 100vh;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* padding: 0 200px; */
+    border: red;
+  }
+  
+ .bloco {
+    width: 650px;
+    height: 650px;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 18px;
+    border-radius: 10px;
+    scroll-snap-align: start; /* Adicione se quiser snap */
+    margin-bottom: 20px; /* Espaço entre blocos */
+}
+  
+@keyframes slide {
+  0%, 15% {
+      transform: translateY(0);
+  }
+  20%, 35% {
+      transform: translateY(-100vh);
+  }
+  40%, 55% {
+      transform: translateY(-200vh);
+  }
+  60%, 75% {
+      transform: translateY(-300vh);
+  }
+  80%, 95% {
+    transform: translateY(-400vh);
+}
+  100% {
+      transform: translateY(0);
+  }
+}
+  .esquerda {
+    background-color: #060423;
+    gap: 22px;
+  }
+  .direita {
+    height: 100vh;
+    scroll-snap-align: start;
+    position: relative;
+    margin: 0;
+    animation: slide 12s infinite; /* 4 seções × 3s cada */
+}
+
+  .sublinhado {
+    text-decoration: underline;
+    color: #EA6A69;
+  }
+  .texto1 {
+    font-size: 32px;
+    margin-top: 9px;
+    text-align: center;
+  }
+  .botao{
+    font-size: 25px;
+    font-weight: lighter;
+    width: 450px;
+    height: 100px;
+    background-image: linear-gradient(90deg, #83161D, #235DB6);
+    border: 2px;
+    border-radius: 10px;
+  }
+  
+  .sub {
+    text-decoration: underline;
+    color: #FBCB4E;
+  }
+  .botao a {
+    color: white;
+    font-family: ProductSans;
+  }
+  .texto2{
+    color: #8395ED;
+    font-size: 28px;
+    margin-bottom: 9px;
+    color: #8395ED;
+  }
+  .logo2 {
+    width: 150px;
+    margin-top: 30px;
+    height: auto;
+  }
+  .bloco2 {
+    display: flex;
+    align-items: center;
+    gap: 60px; 
+  }
+  .texto3{
+    font-size: 25px;
+    color: white;
+  }
+  
+  .secLateral {
+    height: 100vh;
+    overflow-y: hidden; /* Mudamos para hidden */
+    scroll-snap-type: y mandatory;
+}

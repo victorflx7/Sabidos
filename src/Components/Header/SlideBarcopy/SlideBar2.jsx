@@ -1,10 +1,4 @@
 import './SlideBar2.css'
-import IconX from './icon/Barras.svg'
-import IconHouse from './icon/House.svg'
-import IconAgend from './icon/Agend.svg'
-import IconPen from './icon/Pen.svg'
-import IconTime from './icon/Time.svg'
-import IconCard from './icon/Cards.svg'
 
 function SlideBar2() {
 
@@ -12,18 +6,18 @@ function SlideBar2() {
       <>
              <div class="drop nalinha">
               <a>
-                <img src={IconX} id="imgbarle01"/></a>
+                <img src= './icon/Barras.svg' id="imgbarle01"/></a>
                
                
               <div class="dropdownmenu">
                 <div class="drop">
-              <img src={IconX} id="imgbarle01"/></div>
+              <img src='./icon/Barras.svg' id="imgbarle01"/></div>
               
-                  <a><img src={IconHouse} alt="" srcset="" />Home</a>
-                  <a ><img src={IconAgend} alt="" srcset="" /> Agenda</a>
-                  <a ><img src={IconPen} alt="" srcset="" /> Resumos</a>
-                  <a > <img src={IconTime} alt="" srcset="" /> Pomodoro</a>
-                  <a > <img src={IconCard} alt="" srcset="" /> Flashcards</a>
+                  <a><img src='icon/House.svg' alt="" srcset="" />Home</a>
+                  <a ><img src='icon/Agend.svg' alt="" srcset="" /> Agenda</a>
+                  <a ><img src='icon/Pen.svg' alt="" srcset="" /> Resumos</a>
+                  <a > <img src='icon/Time.svg' alt="" srcset="" /> Pomodoro</a>
+                  <a > <img src='icon/Cards.svg' alt="" srcset="" /> Flashcards</a>
                   
                   <a href=""></a>
                   <a href=""></a>

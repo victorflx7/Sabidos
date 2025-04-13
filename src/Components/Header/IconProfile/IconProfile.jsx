@@ -1,16 +1,18 @@
 import './IconProfile.css'
-import IconX from './icon/react.svg'
+
 
 function IconProfile() {
 
     return (
       <>
       <div class="oi">
-        <img src={IconX} alt="sasfasfasf" />
+        <img src="icon/IconProfile.svg" alt="sasfasfasf" className='IconProfile' />
 
             <div class="ProfileModal">
-              <div>
-                <button>Sair</button>
+              <div className='divmodal'>
+            <img src="icon/IconProfile.svg" alt="sasfasfasf" className='imgmodal' />
+                  <button className='gerBtn'>Gerenciar sua Conta </button>
+                <button className='logoutBtn'>Sair da Conta</button>
               </div>
             </div>
         </div>

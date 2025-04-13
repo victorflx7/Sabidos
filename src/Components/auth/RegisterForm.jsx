@@ -48,13 +48,13 @@ return (
       <header className="headerL">
         <img 
           className="logoL" 
-          src="../assets/LogoLogin.svg" 
+          src="LogoLogin.svg"
           alt="logoExtensa" 
           width="409px" 
           height="153px" 
         />
       </header>
-      
+      <br />
       <nav>
       <Link to="/login" id="b1">Login </Link>
         <a id="b2" className="luz">Cadastro</a>

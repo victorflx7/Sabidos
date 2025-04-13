@@ -1,8 +1,5 @@
 import './Footer.css'
 
-import IconInsta from '../assets/react.svg'
-import IconX from '../assets/react.svg'
-import IconGithub from '../assets/react.svg'
 
    
 function Footer() {
@@ -11,9 +8,9 @@ function Footer() {
         <>
             <footer >
             <div className="Redes">
-                    <img src={IconInsta} alt="Logo_Instagram" className="LOGREDES"/>
-                     <img src={IconX} alt="Logo_Twitter_X" className="LOGREDES" />
-                    <img src={IconGithub} alt="Logo_GitHub" className="LOGREDES" />
+                    <img src="/assets/Vectorreal github icon.svg" alt="Logo_Instagram" className="LOGREDES"/>
+                     <img src="/assets/Vectorreal icon Inta.svg" alt="Logo_Twitter_X" className="LOGREDES" />
+                    <img src="/assets/Vectorreal icon X.svg" alt="Logo_GitHub" className="LOGREDES" />
                  </div>
 
                  <div className="Centrado">

@@ -116,12 +116,13 @@ return (
             <a href="" id="a">Política <br /> de privacidade.</a>
           </p>
           <Link to="/login">Já tem conta? Faça login</Link>
+          <Link to="/dashboard">Entrar</Link>
         </div>
+        
       </main>
       
       
     </div>
-    <Link to="/dashboard">Entrar</Link>
     </>
   )
 

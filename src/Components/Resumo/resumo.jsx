@@ -28,7 +28,13 @@ const resumo = () => {
     const agora = new Date();
     const dia = agora.getDate();
     const mes = agora.getMonth() + 1;
-    const dataForm = `${dia}/${mes}`;
+    let dataForm = ""
+    if (mes<10){
+      dataForm = `${dia}/0${mes}`;
+    }
+    else{
+      dataForm = `${dia}/${mes}`;
+    }
     const novoResumo = {
       titulo,
       desc,

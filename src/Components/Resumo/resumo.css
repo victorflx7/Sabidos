@@ -50,7 +50,7 @@ main{
     height: 100%;
     gap: 10px;
 }
-.input{
+.inputTitulo{
     width: 300px;
   height: 40px;
   padding: 10px;
@@ -62,7 +62,7 @@ main{
   outline: none;
   transition: border-color 0.3s;
 }
-.input2{
+.inputDesc{
     width: 300px;
   height: 40px;
   padding: 10px;

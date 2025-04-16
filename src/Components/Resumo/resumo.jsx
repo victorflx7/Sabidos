@@ -44,6 +44,10 @@ const resumo = () => {
     setTitulo("");
     setDesc("");
   }
+  const delResumo = (indexDel) => {
+    const resumosUpd = resumos.filter((resumo, index)=> index !==indexDel)
+    setResumos(resumosUpd)
+  }
   return (
     <div>
       <main>
@@ -53,6 +57,7 @@ const resumo = () => {
             <div className="bloquinho" key={index}>
               {resumo.titulo}
               <p><br />{resumo.data}</p>
+              <button className='btn_del' onClick={() => delResumo(index)}>X</button>
             </div>
             ))}
           </div>

@@ -99,3 +99,7 @@ input::placeholder {
 .botao1{
     background-color: #90C7EE;
 }
+.btn_del{
+  background-color: red;
+  width: 35px;
+}

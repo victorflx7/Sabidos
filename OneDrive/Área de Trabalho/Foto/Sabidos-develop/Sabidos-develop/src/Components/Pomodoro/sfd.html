@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div >
+        <svg width="120" height="120" viewBox="0 0 120 120">
+          {/* Fundo do círculo (opcional) */}
+          <circle
+            cx="60"
+            cy="60"
+            r={radius}
+            fill="none"
+            stroke="#e0e0e0"
+            strokeWidth="10"
+          />
+          {/* Círculo de progresso */}
+          <circle
+            cx="60"
+            cy="60"
+            r={radius}
+            fill="none"
+            stroke="#4CAF50"
+            strokeWidth="10"
+            strokeLinecap="round"
+            strokeDasharray={circumference}
+            strokeDashoffset={strokeDashoffset}
+            transform="rotate(-90 60 60)" // Começa do topo
+          />
+          {/* Texto com porcentagem */}
+          <text
+            x="60"
+            y="65"
+            textAnchor="middle"
+            fontSize="20"
+            fill="#333"
+          >
+            {Math.round(progress)}%
+          </text>
+        </svg>
+      </div>
+</body>
+</html>

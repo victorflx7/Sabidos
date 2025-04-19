@@ -1,4 +1,5 @@
 import './IconProfile.css'
+import { Link } from 'react-router-dom';
 
 
 function IconProfile() {
@@ -11,7 +12,7 @@ function IconProfile() {
             <div class="ProfileModal">
               <div className='divmodal'>
             <img src="icon/IconProfile.svg" alt="sasfasfasf" className='imgmodal' />
-                  <button className='gerBtn'>Gerenciar sua Conta </button>
+            <Link to="/Perfil">  <button className='gerBtn'>Gerenciar sua Conta </button></Link>
                 <button className='logoutBtn'>Sair da Conta</button>
               </div>
             </div>

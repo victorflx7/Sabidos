@@ -1,0 +1,36 @@
+.Perfil-container{
+    align-items: center;
+    height: 90vh;
+}
+.box1{
+    width: 500px;
+    background-color: aqua;
+    display:flex ;
+    border-radius: 30px;
+    align-items: center;
+}
+.box1 .imgPerfil{
+    width: 100px;
+    height: 100px;
+    border-radius: 100px;
+}
+.box2{
+    width: 500px;
+    background-color: rgb(123, 255, 0);
+    /* display:flex ; */
+    border-radius: 30px;
+    text-align: start;
+    position: relative;
+}
+.info1{
+    transform: translate(50px);
+    background-color: blue;
+    height: 90px;
+    width: 300px;
+}
+.info2{
+    transform: translate(50px);
+    background-color: blue;
+    height: 90px;
+    width: 300px;
+}

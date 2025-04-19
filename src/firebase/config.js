@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { getFirestore, collection, addDoc, query, onSnapshot } from "firebase/firestore"; // Importações necessárias para Firestore
 
 const firebaseConfig = {
     apiKey: "AIzaSyAP-mZxxpWRE8oejc25BF6At76qv0Q0ic8",
@@ -8,10 +9,9 @@ const firebaseConfig = {
     messagingSenderId: "772561215621",
     appId: "1:772561215621:web:1dc51f01a23c1dd68b09ec",
     measurementId: "G-T6L50TVSH5",
-    
+};
 
-  };
 const app = initializeApp(firebaseConfig);
+const db = getFirestore(app); // Inicializa o Firestore
 
-export { app };
-
+export { db, collection, addDoc, query, onSnapshot, app };

@@ -3,10 +3,7 @@
     /* padding: 10px; */
 
 }
-figure{
-    background-color: aliceblue;
-    height: 60px;
-}
+
 .ProfileModal{
     border-radius: 17px;
     background: #575757;
@@ -16,6 +13,7 @@ figure{
     position: absolute;
     display: none;
     transform: translate(-90%, 0px);
+    z-index: 5;
 }
 .divmodal{
     display: flex;

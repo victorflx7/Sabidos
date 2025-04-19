@@ -23,7 +23,8 @@
     /* border: #292535 2px solid; */
     /* height: 90vh; */
     transform: translate(6%, 0%);
-   
+    z-index: 5;
+
 }
 
 .drop:hover .dropdownmenu {

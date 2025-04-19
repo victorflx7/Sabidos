@@ -7,7 +7,7 @@ import Footer from '../../Components/Footer/Footer';
 const PrefilPage = () => {
   return (
     <>
-      <Header title='Resumo'/>
+      <Header title='Perfil'/>
       <Perfil/>
       <Footer></Footer>
     </>

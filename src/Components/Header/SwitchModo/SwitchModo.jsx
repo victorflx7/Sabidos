@@ -4,7 +4,7 @@ function SwitchModo() {
 
     return (
       <>
-        <figure>
+        <figure className='figure'>
 
         </figure>
       </>

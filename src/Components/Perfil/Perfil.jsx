@@ -10,6 +10,7 @@ const Profile = () => {
         <figure>
           <img src="vite.svg" alt="" className="imgPerfil" />
         </figure>
+         
         <h1 className="NomePerfil">sjhdfjsydfs</h1>
       </div>
       <div className="box2">

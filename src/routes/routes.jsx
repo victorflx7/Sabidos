@@ -8,7 +8,7 @@ import AccountLayout from '../layouts/AccountLayout';
 import Resumo from "../pages/Resumo/ResumoPage"
 import Agenda from "../pages/Agenda/AgendaPage"
 import Pomodoro from "../pages/Pomodoro/PomodoroPage"
-
+import Perfil from '../pages/PerfilPage/PerfilPage';
 export function AppRoutes() {
   return (
     <Routes>
@@ -25,6 +25,7 @@ export function AppRoutes() {
       <Route path="/Resumo" element={<Resumo />} />
       <Route path="/Agenda" element={<Agenda />} />
       <Route path="/Pomodoro" element={<Pomodoro />} />
+      <Route path="/Perfil" element={<Perfil />} />
 
 
 

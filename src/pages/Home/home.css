@@ -76,14 +76,39 @@ body {
     text-align: center;
   }
   .botao{
+    background: linear-gradient(90deg, #83161D, #235DB6);
+    background-size: 200% 100%;
     font-size: 25px;
-    font-weight: lighter;
+    font-weight:bold;
+    color:#DFDFDF;
     width: 450px;
     height: 100px;
-    background-image: linear-gradient(90deg, #83161D, #235DB6);
+    background-position: left;
+    transition: background-position 1s ease;
     border: 2px;
     border-radius: 10px;
   }
+
+  .botao:hover{
+    cursor:pointer;
+    background-position: top;
+  }
+  /*
+  .botao {
+    background: linear-gradient(90deg, #83161D, #235DB6);
+    background-size: 200% 100%;
+    background-position: left;
+    color: white;
+    padding: 1rem 2rem;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+
+  }
+  .botao:hover {
+    background-position: right;
+  }
+  */
   
   .sub {
     text-decoration: underline;

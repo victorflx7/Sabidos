@@ -12,9 +12,11 @@ export default function Home() {
       <div className="bloco esquerda">
         <img src="frame2.svg" className='logo1' alt="Logo"/>
         <p className='texto1'>Organize seus estudos <br /> de forma <span className="sublinhado">fácil</span></p>
+        <Link to="/cadastro">
         <button className='botao'>
-          <Link to="/cadastro">Cadastre-se ! É grátis</Link>
+          Cadastre-se ! É grátis
         </button>
+        </Link>
         <Link to="/login" className='sub'><br />Já tem uma conta? Entre !</Link>
       </div>
       

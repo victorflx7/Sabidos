@@ -7,26 +7,28 @@ import Dashboard from '../pages/Dashboard/dashboard';
 import AccountLayout from '../layouts/AccountLayout';
 import Resumo from "../pages/Resumo/ResumoPage"
 import Agenda from "../pages/Agenda/AgendaPage"
-import Perfil from "../pages/PerfilPage/PerfilPage"
-
+import Pomodoro from "../pages/Pomodoro/PomodoroPage"
+import Perfil from '../pages/PerfilPage/PerfilPage';
 export function AppRoutes() {
   return (
-     <Routes>
+    <Routes>
 
-       <Route path="/" element={<Home />} />
-    
-     <Route element={<AccountLayout />}>
-       <Route path="/cadastro" element={<Cadastro />} />
-     <Route path="/login" element={<Login />} />
-     </Route>
+      <Route path="/" element={<Home />} />
 
-    
-       <Route path="/dashboard" element={<Dashboard />} />
-       <Route path="/Resumo" element={<Resumo />} />
-       <Route path="/Agenda" element={<Agenda/>} />
-     <Route path="/Perfil" element={<Perfil />} />
+      <Route element={<AccountLayout />}>
+        <Route path="/cadastro" element={<Cadastro />} />
+        <Route path="/login" element={<Login />} />
+      </Route>
 
-     
-   </Routes>
+
+      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/Resumo" element={<Resumo />} />
+      <Route path="/Agenda" element={<Agenda />} />
+      <Route path="/Pomodoro" element={<Pomodoro />} />
+      <Route path="/Perfil" element={<Perfil />} />
+
+
+
+    </Routes>
   )
 }

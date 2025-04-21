@@ -4,45 +4,83 @@
     align-items: center;
     /* background-color: rgb(0, 0, 0); */
     /* height: 100vh; */
+    color: white;
 }
 .Perfil-container{
     height: 90vh;
+    position: relative;
 }
 .box1{
     width: 500px;
-    background-color: aqua;
+    background-color: #2E293D;
+    height: 50px;
     display:flex ;
     border-radius: 10px;
     align-items: center;
     padding: 30px 0px 30px 112px;
     margin-bottom: 15px;
+    margin-top: 80px;
+    border: 1px solid transparent; /* borda fina mas invisível */
+  border-radius: 10px; /* deixa as pontas arredondadas */
+  background: 
+    linear-gradient(#2E293D, #2E293D) padding-box, /* cor do fundo */
+    linear-gradient(350deg, #FF9595, #3085AA) border-box; /* degradê da borda */
 }
 .box1 .imgPerfil{
-    width: 100px;
-    height: 100px;
+    width: 148px;
+    height: 148px;
     border-radius: 100px;
-    transform: translate(-124px, -59px);
+    transform: translate(-110px, -50px);
     position: absolute;
-    border: solid 6px;
+    border: 6px solid #F19437; /* borda laranja */
+    object-fit: cover; /* (opcional) pra imagem ficar certinha */
 }
 .box2{
     /* width: 500px; */
-    height: 180px;
-    background-color: rgb(123, 255, 0);
+    height: 500px;
+    background-color: #2E293D;
     /* display:flex ; */
     border-radius: 10px;
     text-align: start;
+    border: 1px solid transparent; /* borda fina mas invisível */
+  border-radius: 10px; /* deixa as pontas arredondadas */
+  background: 
+    linear-gradient(#2E293D, #2E293D) padding-box, /* cor do fundo */
+    linear-gradient(100deg, #FF9595, #3085AA) border-box; /* degradê da borda */
 }
 .info1{
-    transform: translate(50px);
-    background-color: blue;
-    height: 90px;
+    transform: translate(60px,50px);
+    background-color: #2E293D;
+    height: 100px;
     width: 300px;
-    
+    color: white;
 }
 .info2{
-    transform: translate(50px);
-    background-color: blue;
+    transform: translate(60px);
+    margin-top: 20px;
+    background-color: #2E293D;
     height: 90px;
     width: 300px;
+    color: white;
+}
+.NomePerfil{
+    margin-left: 30px;
+    font-size: 30px;
+}
+.img2{
+    height: 50px;
+    transform: translate(2px, 55px);
+}
+.imgPerfil
+{
+    border: solid #F19437 6px;
+}
+.user, .email{
+    color: #FF9595;
+    font-size: 22px;
+}
+.user2, .email2{
+    position: absolute;
+    top: 35px;
+    left: 30px;
 }

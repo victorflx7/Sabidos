@@ -2,15 +2,13 @@ import React from 'react'
 import './PomodoroPage.css'
 import Header from '../../Components/Header/Header';
 import Footer from '../../Components/Footer/Footer';
-import Pomo from '../../Components/Pomodoro/CircularTimer';
+import Pomodoro from '../../Components/Pomodoro/ProgressoCircular';
 
 const PomodoroPage = () => {
   return (
     <>
       <Header title='Pomodoro'/>
-      <main>
-      <Pomo/>
-      </main>
+      <Pomodoro></Pomodoro>
       <Footer></Footer>
     </>
   )

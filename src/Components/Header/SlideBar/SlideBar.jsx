@@ -17,8 +17,8 @@ function SlideBar() {
                   <a><img src='icon/House.svg' alt="" srcset="" />Home</a>
                   <Link to="/Agenda"><img src='icon/Agend.svg' alt="" srcset="" /> Agenda</Link>
                   <Link to="/Resumo"> <img src='icon/Pen.svg' alt="" srcset="" /> Resumos</Link>
-                  <a > <img src='icon/Time.svg' alt="" srcset="" /> Pomodoro</a>
-                  <a > <img src='icon/Cards.svg' alt="" srcset="" /> Flashcards</a>
+                  <Link to="/Pomodoro"> <img src='icon/Time.svg' alt="" srcset="" /> Pomodoro</Link>
+                  <Link to="/Flashcard"> <img src='icon/Cards.svg' alt="" srcset="" /> Flashcards</Link>
                   
                   <br /><br />
                   

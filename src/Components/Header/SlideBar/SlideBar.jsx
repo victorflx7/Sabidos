@@ -14,7 +14,7 @@ function SlideBar() {
                 <div class="drop">
               <img src='./icon/Barras.svg' id="imgbarle01"/></div>
               
-                  <a><img src='icon/House.svg' alt="" srcset="" />Home</a>
+              <Link to="/dashboard"><img src='icon/House.svg' alt="" srcset="" />Home</Link>
                   <Link to="/Agenda"><img src='icon/Agend.svg' alt="" srcset="" /> Agenda</Link>
                   <Link to="/Resumo"> <img src='icon/Pen.svg' alt="" srcset="" /> Resumos</Link>
                   <Link to="/Pomodoro"> <img src='icon/Time.svg' alt="" srcset="" /> Pomodoro</Link>

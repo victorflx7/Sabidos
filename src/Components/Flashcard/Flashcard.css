@@ -6,7 +6,7 @@
 } */
 .blocoesquerdo {
     width: 220px;
-    height: 700px;
+    height: 850px;
     background-color: #2E293D;
     border: 2px solid #333;
     border-radius: 10px;
@@ -34,7 +34,7 @@
 }
 .blocodireito {
     width: 600px;
-    height: 700px;
+    height: 850px;
     background-color: #C9C9C9;
     border: 2px solid #333;
     border-radius: 10px;

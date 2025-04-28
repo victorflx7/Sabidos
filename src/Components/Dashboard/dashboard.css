@@ -1,0 +1,102 @@
+.Dashboard{
+  height: 90vh;
+}
+/*ComentarioSabido*/
+.mensagemSabido{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+
+}
+.cont {
+    width: 400px;
+    height: 90px;
+    background-color: #292535;
+    border-radius: 25px;
+    display: flex;
+    justify-content: center;
+    align-items:  center;
+}
+.cxpTxt{
+    display: flex;
+    justify-content: center;
+    align-items: start;
+    flex-direction: column;
+    gap: 6px;
+}
+.txtSabido {
+    color: #EEE;
+    font-family: Inter;
+    font-size: 15px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 25px;
+    letter-spacing: 1.5px;
+    text-align: start;
+    width: fit-content;
+    height: fit-content;
+    padding-right: 35px;
+}
+.imgSabido{
+    width: 165px;
+}
+
+/*Atalho*/
+/* Mantém tudo igual aqui */
+.atEinf{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.atalhos {
+    position: relative;
+    width: 300px;
+  }
+.contencao{
+    width: 300px;
+    height: 250px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+  .circulo-central {
+    width: 120px;
+    height: 120px;
+    background-color: #3B2868;
+    border-radius: 50%;
+    border: 3px solid #7763B3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .circulo {
+    width: 60px;
+    height: 60px;
+    background-color: #3B2868;
+    border-radius: 50%;
+    border: 2px solid #7763B3;
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+  }
+
+.circulo1 { top: 50%; left: 5%; }
+
+.circulo2 { top: 82%; left: 15%; }
+
+.circulo3 { top: 50%; left: 95%; }
+
+.circulo4 { top: 82%; left: 85%; }
+
+.circulo5 { top: 100%; left: 50%; }
+
+  
+  

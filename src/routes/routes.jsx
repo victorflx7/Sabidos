@@ -14,7 +14,7 @@ import Flashcard from '../pages/Flashcard/flashcardPage';
 export function AppRoutes() {
   return (
     <Routes>
-
+      <Route path="/home" element={<Home />} />
       <Route path="/" element={<Home />} />
 
       <Route element={<AccountLayout />}>

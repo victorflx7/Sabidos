@@ -9,7 +9,7 @@ import Resumo from "../pages/Resumo/ResumoPage"
 import Agenda from "../pages/Agenda/AgendaPage"
 import Pomodoro from "../pages/Pomodoro/PomodoroPage"
 import Perfil from '../pages/PerfilPage/PerfilPage';
-import Flashcard from '../pages/Flashcard/FlashcardPage';
+import Flashcard from '../pages/Flashcard/flashcardPage';
 
 export function AppRoutes() {
   return (

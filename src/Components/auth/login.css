@@ -1,11 +1,8 @@
 * {
     padding: 0;
     margin: 0;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: ProductSans;
 }
-
-
-
 .logoL {
     position: relative;
     left: 50%;
@@ -24,7 +21,6 @@
     /* text-align: center; */
 
 }
-
 nav {
     position: relative;
     text-align: center;
@@ -35,8 +31,6 @@ nav {
     transform: translate(-50%);
     padding: 10px 0px 10px 0px;
     border-radius: 15px 15px 15px 15px;
-    
-   
 }
 
 nav a {
@@ -44,7 +38,8 @@ nav a {
     padding: 15px;
     text-decoration: none;
     border-radius: 15px 15px 15px 15px;
-    
+    font-family: ProductSans;
+    font-size: 15px;
 }
 
 .luz {
@@ -54,14 +49,14 @@ nav a {
     background-color: #FBCB4E;
 
 }
-
+@font-face {
+    font-family:ProductSans;
+    src: url('./ProductSansBold.ttf');
+  }
 
 .buttonLL {
-   
-
     width: 267.949px;
     height: 40.576px;
-
     background: linear-gradient(90deg, rgba(48, 133, 170, 0.88) 0%, rgba(15, 78, 106, 0.88) 100%), #FFFDFD;
     border: none;
     color: rgb(255, 255, 255);
@@ -72,7 +67,8 @@ nav a {
     line-height: 121.84%;
     cursor: pointer;
     border-radius: 5px;
-
+    margin-top: 15px;
+    font-family: ProductSans
 }
 
 
@@ -82,7 +78,7 @@ nav a {
     margin-top: 30px;
     grid-gap: 17px;
     justify-items: center;
-
+    font-family: ProductSans
 }
 
 .inputL {
@@ -98,11 +94,13 @@ nav a {
     font-weight: 400;
     line-height: normal;
     border: none;
+    font-family: ProductSans
 }
 
 .inputL::placeholder {
     color: rgba(0, 0, 0, 0.50);
     ;
+    font-family: ProductSans
 }
 
 #btn {
@@ -110,11 +108,13 @@ nav a {
     margin-top: 30px;
     margin-left: 35px;
     margin-bottom: 20px;
+    font-family: ProductSans
 }
 
 #p {
     position: relative;
     color: white;
+    font-family: ProductSans
 }
 
 #check {
@@ -122,7 +122,7 @@ nav a {
     display: inline-block;
     margin-left: 10px;
     margin-right: 5px;
-
+font-family: ProductSans
 }
 
 label {
@@ -132,6 +132,7 @@ label {
 #a {
     position: relative;
     color: #FBCB4E;
+    font-family: ProductSans
 }
 
 #d4-log {
@@ -139,6 +140,7 @@ label {
     margin-top: 30px;
     text-align: center;
     font-size: 15px;
+    font-family: ProductSans
 }
 
 #d5-log {
@@ -146,5 +148,5 @@ label {
     margin-top: 10px;
     text-align: center;
     font-size: 18px;
-
+font-family: ProductSans
 }

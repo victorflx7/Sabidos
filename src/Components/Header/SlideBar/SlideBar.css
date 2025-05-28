@@ -34,7 +34,7 @@
     display: block;
     color: white;
     text-decoration: none;
-    padding: 5px;
+    padding: 8px;
     margin-bottom: 30px;
     margin-top: 5px;
     text-align:start;
@@ -47,5 +47,8 @@
 }
 #imgbarle01{
 height: 32px;
-padding: 10px 0;
+padding: 10px 20pxz;
+}
+.logo12{
+    height: 35px;
 }

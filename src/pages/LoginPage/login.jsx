@@ -5,7 +5,6 @@ function LoginPage() {
   return (
     <>
     <Login/>
-    
     </>
   )
 }

@@ -1,42 +1,34 @@
-
-
 /* .cadastro-container {
     height: 100vh;
 } */
-
+@font-face {
+    font-family:ProductSans;
+    src: url('./ProductSansBold.ttf');
+  }
 #cad {
 
     position: absolute;
     left: 50%;
     transform: translate(-50%);
     text-align: center;
-
-
 }
-
-
-
 .buttonCC {
- 
-
     width: 267.949px;
     height: 40.576px;
-
     background: linear-gradient(90deg, rgba(48, 133, 170, 0.88) 0%, rgba(15, 78, 106, 0.88) 100%), #FFFDFD;
     border: none;
     color: rgb(255, 255, 255);
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: ProductSans;
     font-size: 19.322px;
     font-style: normal;
     font-weight: 700;
     line-height: 121.84%;
     cursor: pointer;
     border-radius: 5px;
+    margin-top: 15px;
 
 }
-
-
-.formcad{
+.formcad {
     position: relative;
     display: grid;
     margin-top: 30px;
@@ -44,17 +36,17 @@
     justify-items: center;
 }
 
-
-
-
-#d4-cad{
+#d4-cad {
     position: relative;
     margin-top: 30px;
     text-align: center;
     font-size: 15px;
 }
+#d4-cad p{
+    margin-top: 30px;
+}
 
-#d5-cad{
+#d5-cad {
     position: relative;
     margin-top: 10px;
     text-align: center;

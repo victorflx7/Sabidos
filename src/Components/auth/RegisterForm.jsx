@@ -55,7 +55,7 @@ return (
         />
       </header>
       <br />
-      <nav>
+      <nav className="navv">
       <Link to="/login" id="b1">Login </Link>
         <a id="b2" className="luz">Cadastro</a>
       </nav>
@@ -68,7 +68,7 @@ return (
              value={dadosUsuario.nome}
              onChange={(e) => setDadosUsuario({...dadosUsuario, nome: e.target.value})}
              required
-             placeholder="Usuario" 
+             placeholder="Usuário" 
              />
 
             <input className="inputL" 
@@ -107,16 +107,15 @@ return (
         </div>
           </form>
         </div>
-        
-        
         <div id="d4-cad">
           <p id="p">
-            Ao criar uma conta, você concorda com os <br /> nossos
-            <a href="" id="a"> Termos do serviço</a> e com a nossa 
-            <a href="" id="a">Política <br /> de privacidade.</a>
+            Ao se cadastrar, você confirma que compreende e aceita<br></br>como nossa plataforma funciona.
           </p>
-          <Link to="/login">Já tem conta? Faça login</Link>
-          <Link to="/dashboard">Entrar</Link>
+          <br />
+          <Link to="/login">LOGIN DO GOOGLE PARA SER COLOCADO AQUI</Link>
+          <br />
+          <br />
+          <Link to="/dashboard">Clique aqui para burlar o Cadastro/Login</Link>
         </div>
         
       </main>

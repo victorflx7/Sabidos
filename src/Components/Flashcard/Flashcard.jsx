@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 import './Flashcard.css'
+import { db, collection, addDoc, query, onSnapshot  } from '../../firebase/config';
+import { getAuth } from "firebase/auth";
+import {  where } from "firebase/firestore";
 
 const Flashcard = () => {
     const [cards, setResumos] = useState([]);
@@ -7,10 +10,14 @@ const Flashcard = () => {
     const [frente, setFrente] = useState("");
     const [verso, setVerso] = useState("");
     const [cardsVirados, setCardsVirados] = useState([]);
-
-
-    const salvarResumo = () => {
-
+      const auth = getAuth();
+        const user = auth.currentUser;
+        const userId = user?.uid;
+    
+    
+    const salvarFlashcard = async (e) => {
+        e.preventDefault(); // Previne o comportamento padrão do formulário
+        
         if (titulo.trim() === "" && frente.trim() === "" && verso.trim() === "") {
             window.alert("Sem título, nem descrição? Aí você me quebra, sabido!")
             return;
@@ -51,6 +58,26 @@ const Flashcard = () => {
         setTitulo("");
         setFrente("");
         setVerso("");
+
+        
+            try {
+                await addDoc(collection(db, "flashcards"), {
+                    userId : userId,
+                    titulo: titulo,
+                    frente: frente,
+                    verso: verso,
+                    createdAt: new Date().toISOString()
+
+                });
+                console.log("Flashcard salvo com sucesso!");
+            } catch (error) {
+                console.error("Erro ao salvar evento: ", error);
+            }
+        
+
+
+
+
     }
     const delResumo = (indexDel) => {
         const resumosUpd = cards.filter((resumo, index) => index !== indexDel)
@@ -62,6 +89,8 @@ const Flashcard = () => {
         } else {
             setCardsVirados([...cardsVirados, indexVirar]); // vira
         }
+
+
     };
 
     return (
@@ -88,7 +117,7 @@ const Flashcard = () => {
                         <textarea type="text" className='inputTitulo' placeholder='Título' value={titulo} onChange={(e) => setTitulo(e.target.value)} />
                         <textarea type="text" className='inputDesc' style={{}} placeholder='Frente' value={frente} onChange={(e) => setFrente(e.target.value)} />
                         <textarea type="text" className='inputDesc' placeholder='Verso' value={verso} onChange={(e) => setVerso(e.target.value)} />
-                        <button className='botao1' onClick={salvarResumo}>
+                        <button className='botao1' onClick={salvarFlashcard(e)}>
                             <img src="485.svg" className='imagem1' />
                         </button>
                     </div>

@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Agenda.css';
-import { db, collection, addDoc, query, onSnapshot } from '../../firebase/config';
+import { db, collection, addDoc, query, onSnapshot  } from '../../firebase/config';
+import { getAuth } from "firebase/auth";
+import {  where } from "firebase/firestore";
 
 function Agenda() {
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -8,20 +10,35 @@ function Agenda() {
     const [modalVisible, setModalVisible] = useState(false);
     const [eventTitle, setEventTitle] = useState("");
     const [events, setEvents] = useState([]);
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const userId = user?.uid;
 
-    useEffect(() => {
-        const q = query(collection(db, "events"));
-        const unsubscribe = onSnapshot(q, (querySnapshot) => {
-            const loadedEvents = [];
-            querySnapshot.forEach((doc) => {
-                loadedEvents.push({ id: doc.id, ...doc.data() });
+   useEffect(() => {
+    const auth = getAuth();
+    const unsubscribeAuth = auth.onAuthStateChanged((user) => {
+        if (user) {
+            const q = query(
+                collection(db, "events") , where("userId", "==", user.uid)
+            );
+
+            const unsubscribeSnapshot = onSnapshot(q, (querySnapshot) => {
+                const loadedEvents = [];
+                querySnapshot.forEach((doc) => {
+                    loadedEvents.push({ id: doc.id, ...doc.data() });
+                });
+                setEvents(loadedEvents);
             });
-            console.log("Eventos carregados do Firestore:", loadedEvents); // Log para depuração
-            setEvents(loadedEvents);
-        });
 
-        return () => unsubscribe(); // Limpa o listener ao desmontar
-    }, []);
+            // Clean up snapshot listener
+            return () => unsubscribeSnapshot();
+        }
+    });
+
+    // Clean up auth listener
+    return () => unsubscribeAuth();
+}, []);
+
 
     const renderCalendar = () => {
         const year = currentDate.getFullYear();
@@ -72,9 +89,11 @@ function Agenda() {
         if (selectedDate && eventTitle) {
             try {
                 await addDoc(collection(db, "events"), {
+                    userId : userId,
                     title: eventTitle,
                     date: selectedDate,
                     createdAt: new Date().toISOString()
+
                 });
                 setModalVisible(false);
                 setEventTitle("");
@@ -83,6 +102,7 @@ function Agenda() {
             }
         }
     };
+    
 
     return (
         <div className="agenda">

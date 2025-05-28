@@ -14,15 +14,17 @@ function SlideBar() {
                 <div class="drop">
               <img src='./icon/Barras.svg' id="imgbarle01"/></div>
               
-              <Link to="/dashboard"><img src='icon/House.svg' alt="" srcset="" />Home</Link>
-                  <Link to="/Agenda"><img src='icon/Agend.svg' alt="" srcset="" /> Agenda</Link>
-                  <Link to="/Resumo"> <img src='icon/Pen.svg' alt="" srcset="" /> Resumos</Link>
-                  <Link to="/Pomodoro"> <img src='icon/Time.svg' alt="" srcset="" /> Pomodoro</Link>
-                  <Link to="/Flashcard"> <img src='icon/Cards.svg' alt="" srcset="" /> Flashcards</Link>
-                  
+              <Link to="/dashboard"><img src='icon/House.svg' className="logo12"alt="" srcset="" />Home</Link>
+                  <Link to="/Agenda"><img src='icon/Agend.svg' className="logo12"alt="" srcset="" /> Agenda</Link>
+                  <Link to="/Resumo"> <img src='icon/Pen.svg' className="logo12"alt="" srcset="" /> Resumos</Link>
+                  <Link to="/Pomodoro"> <img src='icon/Time.svg' className="logo12"alt="" srcset="" /> Pomodoro</Link>
+                  <Link to="/Flashcard"> <img src='icon/Cards.svg' className="logo12"alt="" srcset="" /> Flashcards</Link>
                   <br /><br />
                   
-                  <a href="">Sobre Nos</a>
+                  <a href="/sobrenos">
+  <img src='icon/About.svg' className="logo12"/>
+  <span>Sobre nós</span>
+</a>
 
                   <div class="animated-div">
                       <div class="animated-div2">

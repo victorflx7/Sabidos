@@ -117,7 +117,7 @@ const Flashcard = () => {
                         <textarea type="text" className='inputTitulo' placeholder='Título' value={titulo} onChange={(e) => setTitulo(e.target.value)} />
                         <textarea type="text" className='inputDesc' style={{}} placeholder='Frente' value={frente} onChange={(e) => setFrente(e.target.value)} />
                         <textarea type="text" className='inputDesc' placeholder='Verso' value={verso} onChange={(e) => setVerso(e.target.value)} />
-                        <button className='botao1' onClick={salvarFlashcard(e)}>
+                        <button className='botao1' onClick={salvarFlashcard()}>
                             <img src="485.svg" className='imagem1' />
                         </button>
                     </div>

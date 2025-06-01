@@ -7,7 +7,8 @@ main {
 
 .blocoesquerdo {
   width: 220px;
-  height: 700px;
+  max-height: fit-content;
+  min-height: 550px;
   background-color: #2E293D;
   border: 2px solid #333;
   border-radius: 10px;
@@ -33,7 +34,7 @@ main {
 
 .blocodireito {
   width: 600px;
-  height: 700px;
+  max-height: fit-content;
   background-color: #C9C9C9;
   border: 2px solid #333;
   border-radius: 10px;
@@ -52,6 +53,7 @@ main {
   align-items: center;
   height: 100%;
   gap: 10px;
+  max-height: fit-content;
 }
 
 .inputTitulo {

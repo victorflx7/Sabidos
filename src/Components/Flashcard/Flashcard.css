@@ -50,7 +50,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100%;
+    max-height: fit-content;
     gap: 10px;
 }
 .inputTitulo{

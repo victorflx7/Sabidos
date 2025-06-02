@@ -1,131 +1,215 @@
-import React, { useState } from 'react'
-import './Flashcard.css'
-import { db, collection, addDoc, query, onSnapshot  } from '../../firebase/config';
+import React, { useState, useEffect } from 'react';
+import './Flashcard.css';
+import { db } from '../../firebase/config';
+import { collection, addDoc, query, where, onSnapshot, deleteDoc, doc } from 'firebase/firestore';
 import { getAuth } from "firebase/auth";
-import {  where } from "firebase/firestore";
 
 const Flashcard = () => {
-    const [cards, setResumos] = useState([]);
+    const [cards, setCards] = useState([]);
     const [titulo, setTitulo] = useState("");
     const [frente, setFrente] = useState("");
     const [verso, setVerso] = useState("");
     const [cardsVirados, setCardsVirados] = useState([]);
-      const auth = getAuth();
-        const user = auth.currentUser;
-        const userId = user?.uid;
+    const [activeCard, setActiveCard] = useState(null);
     
-    
-    const salvarFlashcard = async (e) => {
-        e.preventDefault(); // Previne o comportamento padrão do formulário
-        
-        if (titulo.trim() === "" && frente.trim() === "" && verso.trim() === "") {
-            window.alert("Sem título, nem descrição? Aí você me quebra, sabido!")
-            return;
-        }
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const userId = user?.uid;
 
-        if (titulo.trim() === "") {
-            window.alert("Parece que você esqueceu de inserir um título!")
-            return;
-        };
+    useEffect(() => {
+        if (!userId) return;
 
-        if (frente.trim() === "") {
-            window.alert("Parece que você esqueceu de inserir uma descrição!")
-            return;
-        };
-        if (verso.trim() === "") {
-            window.alert("Parece que você esqueceu de inserir uma descrição!")
-            return;
-        };
+        const q = query(
+            collection(db, "flashcards"), 
+            where("userId", "==", userId)
+        );
 
-
-        const agora = new Date();
-        const dia = agora.getDate();
-        const mes = agora.getMonth() + 1;
-        let dataForm = ""
-        if (mes < 10) {
-            dataForm = `${dia}/0${mes}`;
-        }
-        else {
-            dataForm = `${dia}/${mes}`;
-        }
-        const novoResumo = {
-            titulo,
-            frente,
-            verso,
-            data: dataForm,
-        };
-        setResumos([...cards, novoResumo]);
-        setTitulo("");
-        setFrente("");
-        setVerso("");
-
-        
-            try {
-                await addDoc(collection(db, "flashcards"), {
-                    userId : userId,
-                    titulo: titulo,
-                    frente: frente,
-                    verso: verso,
-                    createdAt: new Date().toISOString()
-
+        const unsubscribe = onSnapshot(q, (querySnapshot) => {
+            const loadedCards = [];
+            querySnapshot.forEach((doc) => {
+                loadedCards.push({
+                    id: doc.id,
+                    ...doc.data()
                 });
-                console.log("Flashcard salvo com sucesso!");
-            } catch (error) {
-                console.error("Erro ao salvar evento: ", error);
-            }
-        
+            });
+            setCards(loadedCards);
+            // Sort by creation date (newest first)
+            loadedCards.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        });
 
+        return () => unsubscribe();
+    }, [userId]);
 
+    const salvarFlashcard = async (e) => {
+        e.preventDefault();
 
-
-    }
-    const delResumo = (indexDel) => {
-        const resumosUpd = cards.filter((resumo, index) => index !== indexDel)
-        setResumos(resumosUpd)
-    }
-    const virarCard = (indexVirar) => {
-        if (cardsVirados.includes(indexVirar)) {
-            setCardsVirados(cardsVirados.filter(i => i !== indexVirar)); // desvira
-        } else {
-            setCardsVirados([...cardsVirados, indexVirar]); // vira
+        if (!titulo.trim() && !frente.trim() && !verso.trim()) {
+            window.alert("Sem título, nem conteúdo? Aí você me quebra, sabido!");
+            return;
         }
 
+        if (!titulo.trim()) {
+            window.alert("Parece que você esqueceu de inserir um título!");
+            return;
+        }
 
+        if (!frente.trim()) {
+            window.alert("Parece que você esqueceu de inserir o conteúdo da frente!");
+            return;
+        }
+
+        if (!verso.trim()) {
+            window.alert("Parece que você esqueceu de inserir o conteúdo do verso!");
+            return;
+        }
+
+        const dataFormatada = formatarData(new Date());
+
+        try {
+            await addDoc(collection(db, "flashcards"), {
+                userId: userId,
+                titulo: titulo,
+                frente: frente,
+                verso: verso,
+                data: dataFormatada,
+                createdAt: new Date().toISOString()
+            });
+
+            // Limpa os campos
+            setTitulo("");
+            setFrente("");
+            setVerso("");
+            
+        } catch (error) {
+            console.error("Erro ao salvar Flashcard: ", error);
+            window.alert("Ocorreu um erro ao salvar o flashcard!");
+        }
+    }
+
+    const deletarFlashcard = async (id, e) => {
+        e.stopPropagation();
+        if (window.confirm("Tem certeza que deseja deletar este flashcard?")) {
+            try {
+                await deleteDoc(doc(db, "flashcards", id));
+            } catch (error) {
+                console.error("Erro ao deletar flashcard: ", error);
+                window.alert("Ocorreu um erro ao deletar o flashcard!");
+            }
+        }
+    }
+
+    const virarCard = (indexVirar, e) => {
+        e.stopPropagation();
+        setCardsVirados(prev => 
+            prev.includes(indexVirar) 
+                ? prev.filter(i => i !== indexVirar) 
+                : [...prev, indexVirar]
+        );
+    };
+
+    const formatarData = (date) => {
+        const dia = date.getDate();
+        const mes = date.getMonth() + 1;
+        return `${dia}/${mes < 10 ? '0' + mes : mes}`;
+    };
+
+    const handleCardClick = (card) => {
+        setActiveCard(card);
+    };
+
+    const handleBackToList = () => {
+        setActiveCard(null);
     };
 
     return (
-        <>
-            <div>
-
-                <div className='container'>
-                    <div className="blocoesquerdo">
-                        {cards.map((card, index) => (
-                            <div className="bloquinho2" key={index}>
-                                <h5>{card.titulo}</h5>
-                                <br />
-                                <p>{cardsVirados.includes(index) ? card.verso : card.frente}</p>
-                                <p>{card.data}</p>
-                                <button className='btn_del' onClick={() => delResumo(index)}>X</button>
-                                <button onClick={() => virarCard(index)}>
-                                    {cardsVirados.includes(index) ? 'Mostrar Frente' : 'Mostrar Verso'}
-                                </button>
+        <div className="flashcard-container">
+            <div className='containerf'>
+                <div className="blocoesquerdoflashcard">
+                    {activeCard ? (
+                        <div className="active-card-view">
+                            <button onClick={handleBackToList} className="back-button">
+                                ← Voltar
+                            </button>
+                            <div className="active-card-content">
+                                <h3>{activeCard.titulo}</h3>
+                                <div className="card-sides">
+                                    <div className="card-side">
+                                        <h4>Frente:</h4>
+                                        <p>{activeCard.frente}</p>
+                                    </div>
+                                    <div className="card-side">
+                                        <h4>Verso:</h4>
+                                        <p>{activeCard.verso}</p>
+                                    </div>
+                                </div>
+                                <small>Criado em: {activeCard.data}</small>
                             </div>
-                        ))}
-
-                    </div>
-                    <div className='blocodireito'>
-                        <textarea type="text" className='inputTitulo' placeholder='Título' value={titulo} onChange={(e) => setTitulo(e.target.value)} />
-                        <textarea type="text" className='inputDesc' style={{}} placeholder='Frente' value={frente} onChange={(e) => setFrente(e.target.value)} />
-                        <textarea type="text" className='inputDesc' placeholder='Verso' value={verso} onChange={(e) => setVerso(e.target.value)} />
-                        <button className='botao1' onClick={salvarFlashcard()}>
-                            <img src="485.svg" className='imagem1' />
-                        </button>
-                    </div>
+                        </div>
+                    ) : (
+                        cards.map((card, index) => (
+                            <div 
+                                className={`bloquinhoflashcard ${cardsVirados.includes(index) ? 'virado' : ''}`} 
+                                key={card.id}
+                                onClick={() => handleCardClick(card, index)}
+                            >
+                                <h5>{card.titulo}</h5>
+                                <div className="card-content">
+                                    {cardsVirados.includes(index) ? card.verso : card.frente}
+                                </div>
+                                <small>{card.data}</small>
+                                <div className="card-actions">
+                                    <button 
+                                        className='btn-flip' 
+                                        onClick={(e) => virarCard(index, e)}
+                                    >
+                                        🔄
+                                    </button>
+                                    <button 
+                                        className='btn_del' 
+                                        onClick={(e) => deletarFlashcard(card.id, e)}
+                                    >
+                                        X
+                                    </button>
+                                </div>
+                            </div>
+                        ))
+                    )}
                 </div>
-
+                
+                <div className='blocodireitoflashcard'>
+                    <form onSubmit={salvarFlashcard}>
+                        <textarea 
+                            type="text" 
+                            className='inputTitulo' 
+                            placeholder='Título' 
+                            value={titulo} 
+                            onChange={(e) => setTitulo(e.target.value)} 
+                            maxLength={50}
+                        />
+                        <textarea 
+                            type="text" 
+                            className='inputDesc' 
+                            placeholder='Conteúdo da Frente' 
+                            value={frente} 
+                            onChange={(e) => setFrente(e.target.value)} 
+                            rows={5}
+                        />
+                        <textarea 
+                            type="text" 
+                            className='inputDesc' 
+                            placeholder='Conteúdo do Verso' 
+                            value={verso} 
+                            onChange={(e) => setVerso(e.target.value)} 
+                            rows={5}
+                        />
+                        <button type="submit" className='botao1'>
+                            <span>+</span>
+                        </button>
+                    </form>
+                </div>
             </div>
-        </>
-    )
+        </div>
+    );
 }
 
-export default Flashcard
+export default Flashcard;

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getAuth } from 'firebase/auth';
-import { collection, addDoc } from 'firebase/firestore';
-import { db } from '../../firebase/config'; // Assuming you have a firebase config file
+import { collection, addDoc, query, where, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { db } from '../../firebase/config';
 import './resumo.css';
 
 const Resumo = () => {
@@ -9,123 +9,177 @@ const Resumo = () => {
   const [titulo, setTitulo] = useState("");
   const [desc, setDesc] = useState("");
   const [editando, setEditando] = useState(false);
-  const [indexEdicao, setIndexEdicao] = useState(null);
+  const [idEdicao, setIdEdicao] = useState(null); // Agora vamos usar o ID do documento
 
   const auth = getAuth();
   const user = auth.currentUser;
   const userId = user?.uid;
 
+  // Carrega os resumos do Firestore quando o componente monta ou quando o userId muda
+  useEffect(() => {
+    if (userId) {
+      carregarResumos();
+    }
+  }, [userId]);
+
+  const carregarResumos = async () => {
+    try {
+      const q = query(collection(db, "resumos"), where("userId", "==", userId));
+      const querySnapshot = await getDocs(q);
+      
+      const resumosCarregados = [];
+      querySnapshot.forEach((doc) => {
+        resumosCarregados.push({
+          id: doc.id,
+          ...doc.data()
+        });
+      });
+      
+      setResumos(resumosCarregados);
+    } catch (error) {
+      console.error("Erro ao carregar resumos: ", error);
+    }
+  };
+
   const salvarResumo = async (e) => {
     e.preventDefault();
 
-    if (titulo.trim() === "" && desc.trim() === "") {
+    if (!titulo.trim() && !desc.trim()) {
       window.alert("Sem título, nem descrição? Aí você me quebra, sabido!");
       return;
     }
 
-    if (titulo.trim() === "") {
+    if (!titulo.trim()) {
       window.alert("Parece que você esqueceu de inserir um título!");
       return;
     }
 
-    if (desc.trim() === "") {
+    if (!desc.trim()) {
       window.alert("Parece que você esqueceu de inserir uma descrição!");
       return;
     }
 
-    const agora = new Date();
-    const dia = agora.getDate();
-    const mes = agora.getMonth() + 1;
-    let dataForm = "";
-
-    if (mes < 10) {
-      dataForm = `${dia}/0${mes}`;
-    } else {
-      dataForm = `${dia}/${mes}`;
-    }
-
-    if (editando) {
-      const resumosAtualizados = [...resumos];
-      resumosAtualizados[indexEdicao] = {
-        titulo,
-        desc,
-        data: dataForm,
-      };
-      setResumos(resumosAtualizados);
-      setEditando(false);
-      setIndexEdicao(null);
-    } else {
-      const novoResumo = {
-        titulo,
-        desc,
-        data: dataForm,
-      };
-      setResumos([...resumos, novoResumo]);
-    }
-
-    setTitulo("");
-    setDesc("");
+    const dataFormatada = formatarData(new Date());
 
     try {
-      await addDoc(collection(db, "events"), {
-        userId: userId,
-        titulo: titulo,
-        desc: desc,
-        createdAt: new Date().toISOString()
-      });
+      if (editando && idEdicao) {
+        // Atualiza no Firestore
+        await updateDoc(doc(db, "resumos", idEdicao), {
+          titulo,
+          desc,
+          data: dataFormatada,
+          atualizadoEm: new Date().toISOString()
+        });
+        
+        // Atualiza localmente
+        setResumos(resumos.map(resumo => 
+          resumo.id === idEdicao ? { ...resumo, titulo, desc, data: dataFormatada } : resumo
+        ));
+      } else {
+        // Adiciona novo no Firestore
+        const docRef = await addDoc(collection(db, "resumos"), {
+          userId,
+          titulo,
+          desc,
+          data: dataFormatada,
+          criadoEm: new Date().toISOString(),
+          atualizadoEm: new Date().toISOString()
+        });
+        
+        // Adiciona localmente
+        setResumos([...resumos, {
+          id: docRef.id,
+          titulo,
+          desc,
+          data: dataFormatada
+        }]);
+      }
+
+      // Limpa o formulário
+      setTitulo("");
+      setDesc("");
+      setEditando(false);
+      setIdEdicao(null);
     } catch (error) {
-      console.error("Erro ao salvar evento: ", error);
+      console.error("Erro ao salvar resumo: ", error);
     }
-  }
+  };
 
-  const delResumo = (indexDel) => {
-    const resumosUpd = resumos.filter((resumo, index) => index !== indexDel);
-    setResumos(resumosUpd);
-  }
+  const deletarResumo = async (id) => {
+    try {
+      // Remove do Firestore
+      await deleteDoc(doc(db, "resumos", id));
+      
+      // Remove localmente
+      setResumos(resumos.filter(resumo => resumo.id !== id));
+    } catch (error) {
+      console.error("Erro ao deletar resumo: ", error);
+    }
+  };
 
-  const editResumo = (indexEdt) => {
-    const resumoSelec = resumos[indexEdt];
-    setTitulo(resumoSelec.titulo);
-    setDesc(resumoSelec.desc);
-    setEditando(true);
-    setIndexEdicao(indexEdt);
-  }
+  const editarResumo = (id) => {
+    const resumoSelecionado = resumos.find(resumo => resumo.id === id);
+    if (resumoSelecionado) {
+      setTitulo(resumoSelecionado.titulo);
+      setDesc(resumoSelecionado.desc);
+      setEditando(true);
+      setIdEdicao(id);
+    }
+  };
 
-  const criarResumo = () => {
-    setEditando(false);
-    setIndexEdicao(null);
+  const formatarData = (data) => {
+    const dia = data.getDate();
+    const mes = data.getMonth() + 1;
+    return `${dia}/${mes < 10 ? '0' + mes : mes}`;
+  };
+
+  const novoResumo = () => {
     setTitulo("");
     setDesc("");
-  }
+    setEditando(false);
+    setIdEdicao(null);
+  };
 
   return (
-    <>
-      <div>
-        <main>
-          <div className='container'>
-            <div className="blocoesquerdo">
-              {resumos.map((resumo, index) => (
-                <div className="bloquinho" key={index}>
-                  {resumo.titulo}
-                  <p><br />{resumo.data}</p>
-                  <button className='btn_del' onClick={() => delResumo(index)}>X</button>
-                  <button className='btn_edt' onClick={() => editResumo(index)}>O</button>
+    <div>
+      <main>
+        <div className='container'>
+          <div className="blocoesquerdo">
+            {resumos.map((resumo) => (
+              <div className="bloquinho" key={resumo.id}>
+                <h3>{resumo.titulo}</h3>
+                <p>{resumo.desc}</p>
+                <small>{resumo.data}</small>
+                <div className="acoes">
+                  <button className='btn_del' onClick={() => deletarResumo(resumo.id)}>X</button>
+                  <button className='btn_edt' onClick={() => editarResumo(resumo.id)}>O</button>
                 </div>
-              ))}
-            </div>
-            <div className='blocodireito'>
-              <input type="text" className='inputTitulo' placeholder='Título' value={titulo} onChange={(e) => setTitulo(e.target.value)} />
-              <textarea type="text" className='inputDesc' placeholder='Digite aqui a descrição' value={desc} onChange={(e) => setDesc(e.target.value)} />
-              <button className='botao1' onClick={salvarResumo}>
-                <img src="485.svg" className='imagem1' alt="Save" />
-              </button>
-              <button className='btn_novo' onClick={criarResumo}>+</button>
-            </div>
+              </div>
+            ))}
           </div>
-        </main>
-      </div>
-    </>
-  )
-}
+          <div className='blocodireito'>
+            <input 
+              type="text" 
+              className='inputTitulo' 
+              placeholder='Título' 
+              value={titulo} 
+              onChange={(e) => setTitulo(e.target.value)} 
+            />
+            <textarea 
+              className='inputDescricao' 
+              placeholder='Digite aqui a descrição' 
+              value={desc} 
+              onChange={(e) => setDesc(e.target.value)} 
+            />
+            <button className='botao1' onClick={salvarResumo}>
+              <img src="485.svg" className='imagem1' alt="Salvar" />
+            </button>
+            <button className='btn_novo' onClick={novoResumo}>+</button>
+          </div>
+        </div>
+      </main>
+    </div>
+  );
+};
 
 export default Resumo;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-
+import { getAuth } from "firebase/auth";
 const ProgressoCircular = () => {
   const [tempo, setTempo] = useState(0);
   const [tempoMaximo, setTempoMaximo] = useState(0);
@@ -11,10 +11,16 @@ const ProgressoCircular = () => {
   const [cicloAtual, setCicloAtual] = useState(0);
   const [tempoDescansoCurto, setTempoDescansoCurto] = useState(5);
   const [tempoDescansoLongo, setTempoDescansoLongo] = useState(15);
+  const [quantTempoTrbalho, setQuantTempoTrabalho] = useState(0);  
+  const [quantTempoDescanso, setQuantTempoDescanso] = useState(0);
+  const [quantTempoDescansoLongo, setQuantTempoDescansoLongo] = useState(0);
 
   const audioFoco = useRef(null);
   const audioDescanso = useRef(null);
   const audioLongo = useRef(null);
+      const auth = getAuth();
+      const user = auth.currentUser;
+      const userId = user?.uid;
 
   useEffect(() => {
     let intervalo = null;
@@ -22,6 +28,7 @@ const ProgressoCircular = () => {
     if (ativo && !pausado && tempo > 0) {
       intervalo = setInterval(() => {
         setTempo((t) => t - 1);
+        setQuantTempoTrabalho((prev) => prev + 1);
       }, 1000);
     } else if (tempo === 0 && ativo && !pausado) {
       if (!modoDescanso) {
@@ -89,6 +96,30 @@ const ProgressoCircular = () => {
   const progresso = tempoMaximo > 0 ? (tempo / tempoMaximo) * 100 : 0;
   const corFundo = modoDescanso ? '#1E90FF' : '#C52333';
   const corProgresso = modoDescanso ? '#A8D3FF' : '#ECB5B9';
+
+  
+
+  // Preciso da lógica para que esses dados sejam lançados na coleção após o término de todos os ciclos
+const totalTrabalho = quantTempoTrbalho + quantTempoDescanso + quantTempoDescansoLongo;
+  const dataFormatada = new Date().toLocaleDateString('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric'
+  });
+
+
+   await addDoc(collection(db, "pomodoro"), {
+                  userId: userId,
+                  totalTrabalho: totalTrabalho,
+                  cicloAtual: cicloAtual,
+                  data: dataFormatada,
+                  createdAt: new Date().toISOString()
+              });
+  
+              // Limpa os campos
+              setTitulo("");
+              setFrente("");
+              setVerso("");
 
   return (
     <>

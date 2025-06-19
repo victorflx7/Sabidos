@@ -1,13 +1,15 @@
 import React from 'react';
 import './dashboard.css';
 import { Link } from 'react-router-dom';
-
+import  FraseDoDia from "../FraseDoDia/FraseDoDia"; // Importar o componente FraseDoDia se necessário
 const Dashboard = () => {
+
+
     return (
         <>
             <div className='Dashboard'>
-                <div className='mensagemSabido'>
                     <img src='sabidoOfechado.svg' className='imgSabido'></img>
+                <div className='mensagemSabido'>
                     <div className='cont'>
                         <div className='cxpTxt'>
                             <p className='txtSabido'>Opa sabido! Já checou suas notas<br /> hoje?</p>
@@ -66,6 +68,7 @@ const Dashboard = () => {
 
                 </div>
             </div>
+                    <FraseDoDia />
         </>
     )
 }

@@ -10,10 +10,17 @@ const Resumo = () => {
   const [desc, setDesc] = useState("");
   const [editando, setEditando] = useState(false);
   const [idEdicao, setIdEdicao] = useState(null); // Agora vamos usar o ID do documento
+  const [sucesso, setSucesso] = useState(false);
 
   const auth = getAuth();
   const user = auth.currentUser;
   const userId = user?.uid;
+
+  const Desativar = () => {
+    setSucesso(false);
+    
+
+  };
 
   // Carrega os resumos do Firestore quando o componente monta ou quando o userId muda
   useEffect(() => {
@@ -58,6 +65,7 @@ const Resumo = () => {
       window.alert("Parece que você esqueceu de inserir uma descrição!");
       return;
     }
+    
 
     const dataFormatada = formatarData(new Date());
 
@@ -92,7 +100,8 @@ const Resumo = () => {
           titulo,
           desc,
           data: dataFormatada
-        }]);
+        }]); 
+        setSucesso(true);
       }
 
       // Limpa o formulário
@@ -157,6 +166,11 @@ const Resumo = () => {
               </div>
             ))}
           </div>
+          {sucesso && (
+          <div className='textosucesso' onClick={Desativar}>
+            <h1>Seu resumo foi salvo com sucesso !</h1>
+          </div>
+          )}
           <div className='blocodireito'>
             <input 
               type="text" 
@@ -168,7 +182,7 @@ const Resumo = () => {
             <textarea 
               className='inputDescricao' 
               placeholder='Digite aqui a descrição' 
-              value={desc} 
+              value={desc}
               onChange={(e) => setDesc(e.target.value)} 
             />
             <button className='botao1' onClick={salvarResumo}>

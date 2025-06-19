@@ -42,8 +42,7 @@ const Resumo = () => {
   };
 
   const salvarResumo = async (e) => {
-  if (e && e.preventDefault) e.preventDefault();
-
+    if (e && e.preventDefault) e.preventDefault();
     if (!titulo.trim() && !desc.trim()) {
       window.alert("Sem título, nem descrição? Aí você me quebra, sabido!");
       return;
@@ -140,6 +139,24 @@ const Resumo = () => {
     setEditando(false);
     setIdEdicao(null);
   };
+
+  const autosaveTimeout = useRef(null);
+
+  useEffect(() => {
+    if (!titulo.trim() && !desc.trim()) return; 
+
+    if (autosaveTimeout.current) clearTimeout(autosaveTimeout.current);
+
+    autosaveTimeout.current = setTimeout(() => {
+      if (titulo.trim() && desc.trim()) {
+        salvarResumo({ preventDefault: () => {} });
+      }
+    }, 3000);
+
+    return () => clearTimeout(autosaveTimeout.current);
+    
+  }, [titulo, desc]);
+
 
   return (
     <div>

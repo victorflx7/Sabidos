@@ -9,10 +9,14 @@
 
 // Create and deploy your first functions
 // https://firebase.google.com/docs/functions/get-started
-import { onRequest } from "firebase-functions/v2/https";
+import { onRequest } from "firebase-functions/v1/https";
 import logger from "firebase-functions/logger";
+
+
+
 
 export const helloWorld = onRequest((request, response) => {
   logger.info("Hello logs!", {structuredData: true});
   response.send("Hello from Firebase!");
 });
+

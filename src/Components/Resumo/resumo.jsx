@@ -42,8 +42,7 @@ const Resumo = () => {
   };
 
   const salvarResumo = async (e) => {
-    e.preventDefault();
-
+    if (e && e.preventDefault) e.preventDefault();
     if (!titulo.trim() && !desc.trim()) {
       window.alert("Sem título, nem descrição? Aí você me quebra, sabido!");
       return;
@@ -63,7 +62,7 @@ const Resumo = () => {
 
     try {
       if (editando && idEdicao) {
-        // Atualiza no Firestore
+        
         await updateDoc(doc(db, "resumos", idEdicao), {
           titulo,
           desc,
@@ -71,12 +70,12 @@ const Resumo = () => {
           atualizadoEm: new Date().toISOString()
         });
         
-        // Atualiza localmente
+        
         setResumos(resumos.map(resumo => 
           resumo.id === idEdicao ? { ...resumo, titulo, desc, data: dataFormatada } : resumo
         ));
       } else {
-        // Adiciona novo no Firestore
+        
         const docRef = await addDoc(collection(db, "resumos"), {
           userId,
           titulo,
@@ -86,7 +85,7 @@ const Resumo = () => {
           atualizadoEm: new Date().toISOString()
         });
         
-        // Adiciona localmente
+       
         setResumos([...resumos, {
           id: docRef.id,
           titulo,
@@ -95,7 +94,7 @@ const Resumo = () => {
         }]);
       }
 
-      // Limpa o formulário
+      
       setTitulo("");
       setDesc("");
       setEditando(false);
@@ -104,13 +103,13 @@ const Resumo = () => {
       console.error("Erro ao salvar resumo: ", error);
     }
   };
-
+  
   const deletarResumo = async (id) => {
     try {
-      // Remove do Firestore
+      
       await deleteDoc(doc(db, "resumos", id));
       
-      // Remove localmente
+      
       setResumos(resumos.filter(resumo => resumo.id !== id));
     } catch (error) {
       console.error("Erro ao deletar resumo: ", error);
@@ -133,12 +132,31 @@ const Resumo = () => {
     return `${dia}/${mes < 10 ? '0' + mes : mes}`;
   };
 
+  
   const novoResumo = () => {
     setTitulo("");
     setDesc("");
     setEditando(false);
     setIdEdicao(null);
   };
+
+  const autosaveTimeout = useRef(null);
+
+  useEffect(() => {
+    if (!titulo.trim() && !desc.trim()) return; 
+
+    if (autosaveTimeout.current) clearTimeout(autosaveTimeout.current);
+
+    autosaveTimeout.current = setTimeout(() => {
+      if (titulo.trim() && desc.trim()) {
+        salvarResumo({ preventDefault: () => {} });
+      }
+    }, 3000);
+
+    return () => clearTimeout(autosaveTimeout.current);
+    
+  }, [titulo, desc]);
+
 
   return (
     <div>

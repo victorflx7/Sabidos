@@ -106,6 +106,7 @@ function Agenda() {
 
     return (
         <div className="agenda">
+            <h1 className='titulo'>Agenda</h1>
             <main className='main-agenda'>
                 <div className="calendar-container">
                     <div className="calendar-header">

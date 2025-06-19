@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import './CircularTimer.css'
 
 const ProgressoCircular = () => {
   const [tempo, setTempo] = useState(0);
@@ -164,14 +165,17 @@ const ProgressoCircular = () => {
       </svg>
 
       <div style={{ marginTop: '1rem' }}>
-       
-        <button onClick={iniciarFoco} style={{ marginRight: '0.5rem' }}>
+       <div className='botaocima'>
+        <button onClick={iniciarFoco} className='botaoiniciar'>
           Iniciar
         </button>
-        <button onClick={() => setPausado(!pausado)} style={{ marginRight: '0.5rem' }}>
+        </div>
+        <div className='botaobaixo'>
+        <button className='botaobaixo1'onClick={() => setPausado(!pausado)} style={{ marginRight: '0.5rem' }}>
           {pausado ? 'Continuar' : 'Pausar'}
         </button>
-        <button onClick={resetar}>Resetar</button>
+        <button className='botaobaixo2'onClick={resetar}>Resetar</button>
+        </div>
       </div>
     </div>
 

@@ -1,0 +1,31 @@
+
+@media screen and (max-width: 600px){
+    .botaoiniciar{
+        padding: 40px 40px;
+    }
+    .botaoiniciar{
+    display: flex;
+    justify-content: center;
+    margin-bottom: 2rem;
+    margin-left: 53px;
+}
+.botaobaixo{
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+.botaobaixo button{
+    padding: 10px 20px;
+}
+}
+
+
+
+.botaoiniciar{
+    justify-content: center;
+    margin-bottom: 2rem;
+}
+
+.botaocima, .botaobaixo{
+    align-items: center;
+}

@@ -1,78 +1,29 @@
-import * as functions from 'firebase-functions';
-import * as admin from 'firebase-admin';
+import * as functions from "firebase-functions";
+import { initializeApp, getApps } from "firebase-admin/app";
+import { getFirestore } from "firebase-admin/firestore";
 
-admin.initializeApp();
+if (!getApps().length) initializeApp();
+const db = getFirestore();
 
 export const deleteUserData = functions.auth.user().onDelete(async (user) => {
-    const uid = user.uid;
-    const db = admin.firestore();
-  // Lista de coleções onde o usuário tem dados
-  const collectionsToDelete = {
-    'resumos': ['dados'], // Coleção principal e subcoleções
-    'agenda': ['eventos', 'compromissos'],
-    'usuarios': ['dados', 'preferencias']
-  };
-  
+  const uid = user.uid;
+  const colecoes = ['resumos', 'agenda', 'usuarios'];
+
+  console.log(`Iniciando exclusão do usuário ${uid}...`);
+
   try {
-    // Deletar documentos principais (se existirem)
-    const mainDeletions = Object.keys(collectionsToDelete).map(async (collection) => {
-      const docRef = db.collection(collection).doc(uid);
-      await docRef.delete().catch(() => {}); // Ignora erros se o documento não existir
-    });
-    
-    await Promise.all(mainDeletions);
-    
-    // Deletar subcoleções
-    for (const [collection, subcollections] of Object.entries(collectionsToDelete)) {
-      for (const subcollection of subcollections) {
-        await deleteCollection(db, `${collection}/${uid}/${subcollection}`);
-      }
+    for (const colecao of colecoes) {
+      const subRef = db.collection(`${colecao}/${uid}/dados`);
+      const snapshot = await subRef.get();
+
+      const batch = db.batch();
+      snapshot.forEach(doc => batch.delete(doc.ref));
+      await batch.commit();
     }
-    
-    console.log(`Todos os dados do usuário ${uid} foram deletados com sucesso`);
-    return null;
-  } catch (error) {
-    console.error(`Erro ao deletar dados do usuário ${uid}:`, error);
-    throw error;
+
+    await db.doc(`usuarios/${uid}`).delete();
+    console.log(`Usuário ${uid} removido com sucesso.`);
+  } catch (err) {
+    console.error("Erro:", err);
   }
 });
-
-// Função auxiliar para deletar coleções em lotes
-async function deleteCollection(db, collectionPath, batchSize = 50) {
-  const collectionRef = db.collection(collectionPath);
-  const query = collectionRef.orderBy('__name__').limit(batchSize);
-  
-  return new Promise((resolve, reject) => {
-    deleteQueryBatch(db, query, batchSize, resolve, reject);
-  });
-}
-
-function deleteQueryBatch(db, query, batchSize, resolve, reject) {
-  query.get()
-    .then((snapshot) => {
-      if (snapshot.size === 0) {
-        resolve();
-        return;
-      }
-      
-      const batch = db.batch();
-      snapshot.docs.forEach((doc) => {
-        batch.delete(doc.ref);
-      });
-      
-      return batch.commit().then(() => snapshot.size);
-    })
-    .then((numDeleted) => {
-      if (numDeleted === 0) {
-        resolve();
-        return;
-      }
-      
-      // Recursivamente deleta o próximo lote
-    /* global process */
-process.nextTick(() => {
-  deleteQueryBatch(db, query, batchSize, resolve, reject);
-});
-    })
-    .catch(reject);
-}

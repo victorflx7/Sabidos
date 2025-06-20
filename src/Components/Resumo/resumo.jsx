@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { getAuth } from 'firebase/auth';
-import { collection, addDoc, query, where, getDocs, doc, updateDoc, deleteDoc } from 'firebase/firestore';
+import { collection, addDoc, query, where, getDocs, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import './resumo.css';
 
@@ -9,17 +9,22 @@ const Resumo = () => {
   const [titulo, setTitulo] = useState("");
   const [desc, setDesc] = useState("");
   const [editando, setEditando] = useState(false);
-  const [idEdicao, setIdEdicao] = useState(null); // Agora vamos usar o ID do documento
+  const [idEdicao, setIdEdicao] = useState(null); 
+  const [sucesso, setSucesso] = useState(false);
 
   const auth = getAuth();
   const user = auth.currentUser;
   const userId = user?.uid;
 
-  // Carrega os resumos do Firestore quando o componente monta ou quando o userId muda
+
+  const Desativar = () => {
+    setSucesso(false);
+  };
   useEffect(() => {
     if (userId) {
       carregarResumos();
     }
+    
   }, [userId]);
 
   const carregarResumos = async () => {
@@ -42,7 +47,7 @@ const Resumo = () => {
   };
 
   const salvarResumo = async (e) => {
-    e.preventDefault();
+    if (e && e.preventDefault) e.preventDefault();
 
     if (!titulo.trim() && !desc.trim()) {
       window.alert("Sem título, nem descrição? Aí você me quebra, sabido!");
@@ -58,44 +63,45 @@ const Resumo = () => {
       window.alert("Parece que você esqueceu de inserir uma descrição!");
       return;
     }
+    
 
     const dataFormatada = formatarData(new Date());
 
     try {
       if (editando && idEdicao) {
-        // Atualiza no Firestore
+
         await updateDoc(doc(db, "resumos", idEdicao), {
           titulo,
           desc,
           data: dataFormatada,
           atualizadoEm: new Date().toISOString()
         });
-        
-        // Atualiza localmente
+
         setResumos(resumos.map(resumo => 
           resumo.id === idEdicao ? { ...resumo, titulo, desc, data: dataFormatada } : resumo
         ));
       } else {
-        // Adiciona novo no Firestore
         const docRef = await addDoc(collection(db, "resumos"), {
           userId,
           titulo,
           desc,
           data: dataFormatada,
           criadoEm: new Date().toISOString(),
-          atualizadoEm: new Date().toISOString()
+          atualizadoEm: new Date().toISOString(),
+          favoritos: [] 
         });
-        
-        // Adiciona localmente
+
         setResumos([...resumos, {
           id: docRef.id,
           titulo,
           desc,
-          data: dataFormatada
+          data: dataFormatada,
+          favoritos: []
         }]);
+          setSucesso(true);
       }
 
-      // Limpa o formulário
+
       setTitulo("");
       setDesc("");
       setEditando(false);
@@ -104,13 +110,10 @@ const Resumo = () => {
       console.error("Erro ao salvar resumo: ", error);
     }
   };
-
+  
   const deletarResumo = async (id) => {
     try {
-      // Remove do Firestore
       await deleteDoc(doc(db, "resumos", id));
-      
-      // Remove localmente
       setResumos(resumos.filter(resumo => resumo.id !== id));
     } catch (error) {
       console.error("Erro ao deletar resumo: ", error);
@@ -127,18 +130,65 @@ const Resumo = () => {
     }
   };
 
+  // FAVORITOS
+  const toggleFavorito = async (resumoId, favoritos = []) => {
+    if (!userId) return;
+    const resumoRef = doc(db, "resumos", resumoId);
+    try {
+      if (favoritos.includes(userId)) {
+        await updateDoc(resumoRef, {
+          favoritos: arrayRemove(userId)
+        });
+        setResumos(resumos.map(r =>
+          r.id === resumoId
+            ? { ...r, favoritos: r.favoritos?.filter(fav => fav !== userId) }
+            : r
+        ));
+      } else {
+        await updateDoc(resumoRef, {
+          favoritos: arrayUnion(userId)
+        });
+        setResumos(resumos.map(r =>
+          r.id === resumoId
+            ? { ...r, favoritos: [...(r.favoritos || []), userId] }
+            : r
+        ));
+      }
+    } catch (error) {
+      console.error("Erro ao atualizar favorito:", error);
+    }
+  };
+
   const formatarData = (data) => {
     const dia = data.getDate();
     const mes = data.getMonth() + 1;
     return `${dia}/${mes < 10 ? '0' + mes : mes}`;
   };
 
+  
   const novoResumo = () => {
     setTitulo("");
     setDesc("");
     setEditando(false);
     setIdEdicao(null);
   };
+
+  const autosaveTimeout = useRef(null);
+
+  useEffect(() => {
+    if (!titulo.trim() && !desc.trim()) return; 
+
+    if (autosaveTimeout.current) clearTimeout(autosaveTimeout.current);
+
+    autosaveTimeout.current = setTimeout(() => {
+      if (titulo.trim() && desc.trim()) {
+        salvarResumo({ preventDefault: () => {} });
+      }
+    }, 3000);
+
+    return () => clearTimeout(autosaveTimeout.current);
+  }, [titulo, desc]);
+
 
   return (
     <div>
@@ -153,10 +203,22 @@ const Resumo = () => {
                 <div className="acoes">
                   <button className='btn_del' onClick={() => deletarResumo(resumo.id)}>X</button>
                   <button className='btn_edt' onClick={() => editarResumo(resumo.id)}>O</button>
+                  <button
+                    className={`btn_fav ${resumo.favoritos?.includes(userId) ? 'favorito' : ''}`}
+                    onClick={() => toggleFavorito(resumo.id, resumo.favoritos || [])}
+                    title={resumo.favoritos?.includes(userId) ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+                  >
+                    ★
+                  </button>
                 </div>
               </div>
             ))}
           </div>
+          {sucesso && (
+          <div className='textosucesso' onClick={Desativar}>
+            <h1>Seu resumo foi salvo com sucesso !</h1>
+          </div>
+          )}
           <div className='blocodireito'>
             <input 
               type="text" 
@@ -168,7 +230,7 @@ const Resumo = () => {
             <textarea 
               className='inputDescricao' 
               placeholder='Digite aqui a descrição' 
-              value={desc} 
+              value={desc}
               onChange={(e) => setDesc(e.target.value)} 
             />
             <button className='botao1' onClick={salvarResumo}>

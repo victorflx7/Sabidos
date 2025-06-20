@@ -1,17 +1,22 @@
 import React from 'react';
 import './dashboard.css';
 import { Link } from 'react-router-dom';
+import { getAuth } from 'firebase/auth';
+import  FraseDoDia from "../FraseDoDia/FraseDoDia";
 
 const Dashboard = () => {
+    const auth = getAuth();
+    const user = auth.currentUser;
+    const userId = user?.id;
     return (
         <>
             <div className='Dashboard'>
-                <div className='mensagemSabido'>
                     <img src='sabidoOfechado.svg' className='imgSabido'></img>
+                <div className='mensagemSabido'>
                     <div className='cont'>
                         <div className='cxpTxt'>
-                            <p className='txtSabido'>Opa sabido! Já checou suas notas<br /> hoje?</p>
-                            <p className='txtSabido'>Bons estudos, mantenha o foco.</p>
+                            <p className='txtSabido'>Olá {user?.displayName} !</p>
+                            <p className='txtSabido'>Pronto para estudar hoje?</p>
                         </div>
                     </div>
                 </div>
@@ -66,6 +71,7 @@ const Dashboard = () => {
 
                 </div>
             </div>
+                    <FraseDoDia />
         </>
     )
 }

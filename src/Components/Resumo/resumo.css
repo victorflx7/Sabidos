@@ -137,6 +137,17 @@ input::placeholder {
   background-color: rgb(210, 113, 38);
   width: 35px;
 }
+.btn_fav {
+  background: none;
+  border: none;
+  font-size: 1.5em;
+  cursor: pointer;
+  color: #bbb;
+  transition: color 0.2s;
+}
+.btn_fav.favorito {
+  color: gold;
+}
 .textosucesso{
   position: absolute;
   font-size: 7px;

@@ -2,9 +2,14 @@ import axios from 'axios';
 
 export async function getFraseMotivacional() {
   try {
-    const res = await axios.get('https://zenquotes.io/api/today');
-    const frase = res.data[0]?.q;
-    const autor = res.data[0]?.a;
+    const res = await axios.get(
+      `https://api.allorigins.win/get?url=${encodeURIComponent("https://zenquotes.io/api/today")}`
+    );
+
+    const json = JSON.parse(res.data.contents);
+    const frase = json[0]?.q;
+    const autor = json[0]?.a;
+
     return `${frase} — ${autor}`;
   } catch (error) {
     console.warn("Erro ao buscar frase, usando fallback.");

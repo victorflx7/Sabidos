@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import './Agenda.css';
-import { db, collection, addDoc, query, onSnapshot  } from '../../firebase/config';
+import { db, collection, addDoc, query, onSnapshot } from '../../firebase/config';
 import { getAuth } from "firebase/auth";
-import {  where } from "firebase/firestore";
+import { where } from "firebase/firestore";
 
 function Agenda() {
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -14,30 +14,30 @@ function Agenda() {
     const user = auth.currentUser;
     const userId = user?.uid;
 
-   useEffect(() => {
-    const auth = getAuth();
-    const unsubscribeAuth = auth.onAuthStateChanged((user) => {
-        if (user) {
-            const q = query(
-                collection(db, "events") , where("userId", "==", user.uid)
-            );
+    useEffect(() => {
+        const auth = getAuth();
+        const unsubscribeAuth = auth.onAuthStateChanged((user) => {
+            if (user) {
+                const q = query(
+                    collection(db, "events"), where("userId", "==", user.uid)
+                );
 
-            const unsubscribeSnapshot = onSnapshot(q, (querySnapshot) => {
-                const loadedEvents = [];
-                querySnapshot.forEach((doc) => {
-                    loadedEvents.push({ id: doc.id, ...doc.data() });
+                const unsubscribeSnapshot = onSnapshot(q, (querySnapshot) => {
+                    const loadedEvents = [];
+                    querySnapshot.forEach((doc) => {
+                        loadedEvents.push({ id: doc.id, ...doc.data() });
+                    });
+                    setEvents(loadedEvents);
                 });
-                setEvents(loadedEvents);
-            });
 
-            // Clean up snapshot listener
-            return () => unsubscribeSnapshot();
-        }
-    });
+                // Clean up snapshot listener
+                return () => unsubscribeSnapshot();
+            }
+        });
 
-    // Clean up auth listener
-    return () => unsubscribeAuth();
-}, []);
+        // Clean up auth listener
+        return () => unsubscribeAuth();
+    }, []);
 
 
     const renderCalendar = () => {
@@ -89,7 +89,7 @@ function Agenda() {
         if (selectedDate && eventTitle) {
             try {
                 await addDoc(collection(db, "events"), {
-                    userId : userId,
+                    userId: userId,
                     title: eventTitle,
                     date: selectedDate,
                     createdAt: new Date().toISOString()
@@ -102,10 +102,11 @@ function Agenda() {
             }
         }
     };
-    
+
 
     return (
         <div className="agenda">
+            <h1 className='titulo'>Agenda</h1>
             <main className='main-agenda'>
                 <div className="calendar-container">
                     <div className="calendar-header">
@@ -141,7 +142,11 @@ function Agenda() {
                         {renderCalendar()}
                     </div>
                     <div className="box-btnadd">
-                        <button className="btnadd" onClick={() => setModalVisible(true)}>
+                        <button
+                            className="btnadd"
+                            onClick={() => userId && setModalVisible(true)}
+                            disabled={!userId}
+                        >
                             &#43;
                         </button>
                     </div>

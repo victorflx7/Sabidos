@@ -148,3 +148,10 @@ input::placeholder {
 .btn_fav.favorito {
   color: gold;
 }
+.textosucesso{
+  position: absolute;
+  font-size: 7px;
+  color: rgb(0, 0, 0);
+  padding: 10px;
+  transform: translate(310px, -240px);
+}

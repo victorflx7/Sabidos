@@ -10,11 +10,16 @@ const Resumo = () => {
   const [desc, setDesc] = useState("");
   const [editando, setEditando] = useState(false);
   const [idEdicao, setIdEdicao] = useState(null); 
+  const [sucesso, setSucesso] = useState(false);
 
   const auth = getAuth();
   const user = auth.currentUser;
   const userId = user?.uid;
 
+
+  const Desativar = () => {
+    setSucesso(false);
+  };
   useEffect(() => {
     if (userId) {
       carregarResumos();
@@ -58,17 +63,20 @@ const Resumo = () => {
       window.alert("Parece que você esqueceu de inserir uma descrição!");
       return;
     }
+    
 
     const dataFormatada = formatarData(new Date());
 
     try {
       if (editando && idEdicao) {
+
         await updateDoc(doc(db, "resumos", idEdicao), {
           titulo,
           desc,
           data: dataFormatada,
           atualizadoEm: new Date().toISOString()
         });
+
         setResumos(resumos.map(resumo => 
           resumo.id === idEdicao ? { ...resumo, titulo, desc, data: dataFormatada } : resumo
         ));
@@ -82,14 +90,17 @@ const Resumo = () => {
           atualizadoEm: new Date().toISOString(),
           favoritos: [] 
         });
+
         setResumos([...resumos, {
           id: docRef.id,
           titulo,
           desc,
           data: dataFormatada,
-          favoritos: []
+          favoritos: [];
+          setSucesso(true);
         }]);
       }
+
 
       setTitulo("");
       setDesc("");
@@ -99,7 +110,7 @@ const Resumo = () => {
       console.error("Erro ao salvar resumo: ", error);
     }
   };
-
+  
   const deletarResumo = async (id) => {
     try {
       await deleteDoc(doc(db, "resumos", id));
@@ -154,6 +165,7 @@ const Resumo = () => {
     return `${dia}/${mes < 10 ? '0' + mes : mes}`;
   };
 
+  
   const novoResumo = () => {
     setTitulo("");
     setDesc("");
@@ -176,6 +188,7 @@ const Resumo = () => {
 
     return () => clearTimeout(autosaveTimeout.current);
   }, [titulo, desc]);
+
 
   return (
     <div>
@@ -201,6 +214,11 @@ const Resumo = () => {
               </div>
             ))}
           </div>
+          {sucesso && (
+          <div className='textosucesso' onClick={Desativar}>
+            <h1>Seu resumo foi salvo com sucesso !</h1>
+          </div>
+          )}
           <div className='blocodireito'>
             <input 
               type="text" 
@@ -212,7 +230,7 @@ const Resumo = () => {
             <textarea 
               className='inputDescricao' 
               placeholder='Digite aqui a descrição' 
-              value={desc} 
+              value={desc}
               onChange={(e) => setDesc(e.target.value)} 
             />
             <button className='botao1' onClick={salvarResumo}>

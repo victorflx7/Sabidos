@@ -1,8 +1,17 @@
 import './IconProfile.css'
 import { Link } from 'react-router-dom';
 
+import { logoutUsuario } from "../../../services/authService"; // ajuste o caminho conforme necessário
+import { useNavigate } from "react-router-dom";
 
 function IconProfile() {
+
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logoutUsuario();
+    navigate("/login"); 
+  };
 
     return (
       <>
@@ -13,7 +22,7 @@ function IconProfile() {
               <div className='divmodal'>
             <img src="icon/IconProfile.svg" alt="sasfasfasf" className='imgmodal' />
             <Link to="/Perfil">  <button className='gerBtn'>Gerenciar sua Conta </button></Link>
-                <button className='logoutBtn'>Sair da Conta</button>
+                <button className='logoutBtn'onClick={handleLogout} >Sair da Conta</button>
               </div>
             </div>
         </div>
@@ -21,4 +30,4 @@ function IconProfile() {
     )
   }
   
-  export default IconProfile
+  export default IconProfile ;

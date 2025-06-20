@@ -1,4 +1,5 @@
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
 import { getFirestore, collection, addDoc, query, onSnapshot } from "firebase/firestore"; // Importações necessárias para Firestore
 
 const firebaseConfig = {
@@ -13,5 +14,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app); // Inicializa o Firestore
+const auth = getAuth(app)
 
-export { db, collection, addDoc, query, onSnapshot, app };
+export { db, collection, addDoc, query, onSnapshot, auth, app };

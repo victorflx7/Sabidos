@@ -96,9 +96,9 @@ const Resumo = () => {
           titulo,
           desc,
           data: dataFormatada,
-          favoritos: [];
-          setSucesso(true);
+          favoritos: []
         }]);
+          setSucesso(true);
       }
 
 

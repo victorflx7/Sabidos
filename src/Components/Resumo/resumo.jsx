@@ -3,6 +3,8 @@ import { getAuth } from 'firebase/auth';
 import { collection, addDoc, query, where, getDocs, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import './resumo.css';
+import { registrarEvento } from '../../services/analytics/analyticsEvents'; 
+import { incrementarContadorEvento } from '../../services/analytics/analyticsEvents';
 
 const Resumo = () => {
   const [resumos, setResumos] = useState([]);
@@ -100,6 +102,13 @@ const Resumo = () => {
         }]);
           setSucesso(true);
       }
+      registrarEvento('criou_resumo', {
+        titulo: titulo,
+        Conteudo: desc,
+        caracteres: desc.length,
+        data: new Date().toISOString()
+      });
+      incrementarContadorEvento('criou_resumo');
 
 
       setTitulo("");

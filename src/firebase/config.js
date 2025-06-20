@@ -1,3 +1,4 @@
+import { getAnalytics, logEvent } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
 import { getFirestore, collection, addDoc, query, onSnapshot } from "firebase/firestore"; // Importações necessárias para Firestore
 
@@ -11,7 +12,10 @@ const firebaseConfig = {
     measurementId: "G-T6L50TVSH5",
 };
 
+const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
+
+
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app); // Inicializa o Firestore
 
-export { db, collection, addDoc, query, onSnapshot, app };
+export { db, collection, addDoc, query, onSnapshot, app , analytics, logEvent };

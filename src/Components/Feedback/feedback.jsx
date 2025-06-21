@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { db } from "./firebaseConfig";
 import { collection, addDoc, serverTimestamp } from "firebase/firestore";
+import { registrarEvento } from "../../services/analytics/analyticsEvents"; 
+import { incrementarContadorEvento } from '../../services/analytics/analyticsEvents';
 
 export const FeedbackForm = () => {
   const [nome, setNome] = useState("");
@@ -17,7 +19,15 @@ export const FeedbackForm = () => {
         data: serverTimestamp()  
       });
       alert("Feedback enviado!");
-      
+
+      registrarEvento('Envio_Feedback', {
+        caracteres: mensagem ,
+        nome: nome || "Anônimo",  
+        email: email || "Não informado",
+        data: new Date().toISOString()  
+      });
+      incrementarContadorEvento('Envio_Feedback');
+
       setNome("");
       setEmail("");
       setMensagem("");

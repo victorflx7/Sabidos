@@ -3,11 +3,15 @@ import { getAuth } from 'firebase/auth';
 import { collection, addDoc, query, where, getDocs, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import './resumo.css';
+import { registrarEvento } from '../../services/analytics/analyticsEvents'; 
+import { incrementarContadorEvento } from '../../services/analytics/analyticsEvents';
 
 const Resumo = () => {
   const [resumos, setResumos] = useState([]);
   const [titulo, setTitulo] = useState("");
   const [desc, setDesc] = useState("");
+  const [isListening, setIsListening] = useState(false);
+  const recognitionRef = useRef(null);
   const [editando, setEditando] = useState(false);
   const [idEdicao, setIdEdicao] = useState(null); 
   const [sucesso, setSucesso] = useState(false);
@@ -100,6 +104,13 @@ const Resumo = () => {
         }]);
           setSucesso(true);
       }
+      registrarEvento('criou_resumo', {
+        titulo: titulo,
+        Conteudo: desc,
+        caracteres: desc.length,
+        data: new Date().toISOString()
+      });
+      incrementarContadorEvento('criou_resumo');
 
 
       setTitulo("");
@@ -190,6 +201,48 @@ const Resumo = () => {
   }, [titulo, desc]);
 
 
+  useEffect(() => {
+    const SpeechRecognition = window.SpeechRecognition ||  window.webkitSpeechRecognition;
+
+    if (!SpeechRecognition) {
+      console.warn('Este navegador não suporta a Web Speech API');
+      return;
+    }
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'pt-BR';
+    recognition.continuous = true;
+    recognition.interimResults = true;
+
+    recognition.onresult = (event) => {
+      let interimTranscript = '';
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          setDesc((prevDesc) => prevDesc + '' + transcript);
+        } else {
+          interimTranscript += transcript;
+        }
+      }
+      const liveTextDiv = document.getElementById('live-text');
+      if (liveTextDiv) liveTextDiv.innerText = interimTranscript;
+    };
+
+    recognitionRef.current = recognition;
+
+  }, []);
+
+  const handleMicClick = () => {
+    if (!recognitionRef.current) return;
+      
+    if (isListening) {
+      recognitionRef.current.stop();
+    } else {
+      document.getElementById('live-text').innerText = '';
+      recognitionRef.current.start();
+    }
+    setIsListening(!isListening);
+  };
+
   return (
     <div>
       <main>
@@ -233,10 +286,31 @@ const Resumo = () => {
               value={desc}
               onChange={(e) => setDesc(e.target.value)} 
             />
+            <button 
+              onClick={handleMicClick}
+              style = {{
+                padding: '10px 20px',
+                backgroundColor: isListening ? '#f44336' : '#4caf50',
+                color: 'white',
+                border: 'none',
+                borderRadius: '5px',
+                cursor: 'pointer',
+                marginTop: '10px'
+              }}
+              >
+                {isListening ? 'Parar 🎤' : 'Iniciar 🎤'}
+              </button>
+
+              <div style={{marginTop: '10px', fontSize: '14px', color: '#333'}}>
+                <strong>
+                  <br />Texto ao vivo:
+                </strong>
+                <p id="live-text" style={{background: '#eee', padding: '5px', minHeight: '20px'}}></p>
+              </div>
+
             <button className='botao1' onClick={salvarResumo}>
               <img src="485.svg" className='imagem1' alt="Salvar" />
             </button>
-            <button className='btn_novo' onClick={novoResumo}>+</button>
           </div>
         </div>
       </main>

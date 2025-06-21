@@ -3,6 +3,8 @@ import './Agenda.css';
 import { db, collection, addDoc, query, onSnapshot } from '../../firebase/config';
 import { getAuth } from "firebase/auth";
 import { where } from "firebase/firestore";
+import { registrarEvento } from '../../services/analytics/analyticsEvents'; 
+import { incrementarContadorEvento } from '../../services/analytics/analyticsEvents';
 
 function Agenda() {
     const [currentDate, setCurrentDate] = useState(new Date());
@@ -95,6 +97,12 @@ function Agenda() {
                     createdAt: new Date().toISOString()
 
                 });
+
+                registrarEvento('Add_EventoAgenda', {
+                titulo: eventTitle,
+                data: selectedDate,
+                });
+                incrementarContadorEvento('Add_EventoAgenda');
                 setModalVisible(false);
                 setEventTitle("");
             } catch (error) {

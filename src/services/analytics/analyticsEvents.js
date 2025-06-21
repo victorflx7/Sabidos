@@ -1,4 +1,4 @@
-import { analytics, logEvent } from "../../firebase/firebaseConfig";
+import { analytics, logEvent } from "../../firebase/config";
 import { doc, increment, setDoc } from "firebase/firestore";
 import { db } from "../../firebase/firebaseConfig";
 

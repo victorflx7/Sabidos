@@ -1,6 +1,6 @@
 import { analytics, logEvent } from "../../firebase/config";
 import { doc, increment, setDoc } from "firebase/firestore";
-import { db } from "../../firebase/firebaseConfig";
+import { db } from "../../firebase/config"
 
 export function registrarEvento(nome, parametros = {}) {
   if (!analytics) return;

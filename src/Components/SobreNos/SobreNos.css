@@ -1,0 +1,54 @@
+.container-snos, .container-bloco-snos {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 2rem;
+    height: fit-content;
+    background-color: #060423;
+}
+
+.titulo-snos, .span-snos {
+    background: linear-gradient(90deg, #E44B4B 3.85%, #A45981 44.23%, #279BCE 82.69%);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    font-weight: bold;
+
+}
+.titulo-snos {
+    margin-bottom: 3rem;
+}
+
+.container-bloco-snos {
+    gap: 1rem;
+}
+
+.descricao-snos {
+    text-align: center;
+    max-width: 800px;
+    color: #FBCB4E;
+}
+
+.bloco-snos {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+}
+
+.caixa-snos {
+    background-color: #1D1B2A;
+    border-radius: 10px;
+    min-width: 300px;
+    max-width: 480px;
+    padding: 1rem 1.5rem;
+    color: #eaeaea;
+}
+
+.avatar-snos {
+    width: 80px;
+    height: 80px;
+    padding: 8px;
+    border-radius: 50%;
+    background-color: #312D42;
+}

@@ -15,6 +15,7 @@ const Agenda = lazy(() => import("../pages/Agenda/AgendaPage"));
 const Pomodoro = lazy(() => import("../pages/Pomodoro/PomodoroPage"));
 const Perfil = lazy(() => import('../pages/PerfilPage/PerfilPage'));
 const Flashcard = lazy(() => import('../pages/Flashcard/flashcardPage'));
+const SobreNos = lazy(()=> import('../pages/SobreNos/SobreNosPage'))
 
 export function AppRoutes() {
   return (
@@ -35,6 +36,7 @@ export function AppRoutes() {
         <Route path="/Pomodoro" element={<PrivateRoute><Pomodoro /></PrivateRoute>} />
         <Route path="/Perfil" element={<PrivateRoute><Perfil /></PrivateRoute>} />
         <Route path="/Flashcard" element={<PrivateRoute><Flashcard /></PrivateRoute>} />
+        <Route path="/SobreNos" element={<PrivateRoute><SobreNos /></PrivateRoute>}/>
   
   
   

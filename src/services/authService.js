@@ -2,7 +2,7 @@ import {
   getAuth, 
   createUserWithEmailAndPassword, 
   signInWithEmailAndPassword,
-  updateProfile ,  signOut
+  updateProfile
 } from "firebase/auth";
 import { app } from '../firebase/config';
 
@@ -44,21 +44,5 @@ export const fazerLogin = async (email, senha) => {
       success: false,
       error: error.message
     };
-  }
-};
-
-
-/**
- * Realiza o logout do usuário autenticado.
- * @returns {Promise<void>}
- */
-export const logoutUsuario = async () => {
-  const auth = getAuth();
-
-  try {
-    await signOut(auth);
-    console.log("Usuário deslogado com sucesso.");
-  } catch (error) {
-    console.error("Erro ao fazer logout:", error);
   }
 };

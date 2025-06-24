@@ -1,0 +1,148 @@
+
+@media (max-width: 600px){
+    .botaoiniciar{
+        padding: 40px 40px;
+    }
+    
+
+.botaobaixo button{
+    padding: 40px 40px;
+}
+}
+
+
+
+
+
+.pomodoro-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  gap: 2rem;
+  padding: 1rem;
+  background: #1B0F35 8.98%, #060423 42.23%;;
+}
+
+.config-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.config-box {
+  background-color: #C52333;
+  border-radius: 10px;
+  padding: 1rem;
+  width: 160px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.config-box label {
+  color: #ECB5B9;
+  font-weight: bold;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.config-box input {
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  width: 80px;
+  text-align: center;
+  background-color: #fff;
+}
+
+.timer-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.circular-progress {
+  position: relative;
+}
+
+.timer-text {
+  fill: #6E1C1C;
+  stroke: #601717;
+  stroke-width: 1.38;
+  font-family: 'Inter', sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  translate: -14px;
+}
+
+.timer-emoji {
+  font-family: 'Segoe UI Emoji', 'Apple Color Emoji', sans-serif;
+  font-size: 40px;
+  font-weight: 700;
+  translate: -27px;
+}
+
+.timer-controls {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.timer-controls button:disabled {
+  background-color: #cccccc;
+  cursor: not-allowed;
+}
+
+.timer-controls button:hover:not(:disabled) {
+  background-color: #187bcd;
+}
+
+.ciclos-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.5rem;
+  max-width: 500px;
+}
+
+.ciclo-box {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e0e0e0;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.ciclo-box.completo {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.ciclo-box.ativo {
+  background-color: #FFA000;
+  color: white;
+  transform: scale(1.1);
+  box-shadow: 0 0 10px rgba(255, 160, 0, 0.5);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .config-container {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .timer-controls {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}

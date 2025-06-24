@@ -6,7 +6,7 @@ import Agenda from '../../Components/Agenda/Agenda';
 const AgendaPage = () => {
   return (
     <>
-      <Header title='Agenda'/>
+      <Header/>
       <Agenda/>
       <Footer></Footer>
     </>

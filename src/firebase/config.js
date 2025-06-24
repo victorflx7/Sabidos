@@ -1,6 +1,5 @@
 import { getAnalytics, logEvent } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
 import { getFirestore, collection, addDoc, query, onSnapshot } from "firebase/firestore"; // Importações necessárias para Firestore
 
 const firebaseConfig = {
@@ -18,5 +17,5 @@ const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
 
 const app = initializeApp(firebaseConfig);
 const db = getFirestore(app); // Inicializa o Firestore
-const auth = getAuth(app)
-export { db, collection, addDoc, query, onSnapshot, app , analytics, logEvent, auth };
+
+export { db, collection, addDoc, query, onSnapshot, app , analytics, logEvent };

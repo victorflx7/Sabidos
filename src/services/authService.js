@@ -86,13 +86,3 @@ export const loginWithGoogle = async () => {
  * Realiza o logout do usuário autenticado.
  * @returns {Promise<void>}
  */
-export const logoutUsuario = async () => {
-  const auth = getAuth();
-
-  try {
-    await signOut(auth);
-    console.log("Usuário deslogado com sucesso.");
-  } catch (error) {
-    console.error("Erro ao fazer logout:", error);
-  }
-};

@@ -1,6 +1,7 @@
 import { getAnalytics, logEvent } from "firebase/analytics";
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, query, onSnapshot } from "firebase/firestore"; // Importações necessárias para Firestore
+import { getFirestore, collection, addDoc, query, onSnapshot } from "firebase/firestore";
+import { getAuth } from "firebase/auth"// Importações necessárias para Firestore
 
 const firebaseConfig = {
     apiKey: "AIzaSyAP-mZxxpWRE8oejc25BF6At76qv0Q0ic8",

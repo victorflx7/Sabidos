@@ -6,6 +6,7 @@ import './resumo.css';
 import { registrarEvento } from '../../services/analytics/analyticsEvents'; 
 import { incrementarContadorEvento } from '../../services/analytics/analyticsEvents';
 import { enviarEventoGTM } from '../../services/analytics/gtm';
+import Tesseract from 'tesseract.js';
 
 const Resumo = () => {
   const [resumos, setResumos] = useState([]);
@@ -14,29 +15,27 @@ const Resumo = () => {
   const [isListening, setIsListening] = useState(false);
   const recognitionRef = useRef(null);
   const [editando, setEditando] = useState(false);
-  const [idEdicao, setIdEdicao] = useState(null); 
+  const [idEdicao, setIdEdicao] = useState(null);
   const [sucesso, setSucesso] = useState(false);
 
   const auth = getAuth();
   const user = auth.currentUser;
   const userId = user?.uid;
 
-
   const Desativar = () => {
     setSucesso(false);
   };
+
   useEffect(() => {
     if (userId) {
       carregarResumos();
     }
-    
   }, [userId]);
 
   const carregarResumos = async () => {
     try {
       const q = query(collection(db, "resumos"), where("userId", "==", userId));
       const querySnapshot = await getDocs(q);
-      
       const resumosCarregados = [];
       querySnapshot.forEach((doc) => {
         resumosCarregados.push({
@@ -44,7 +43,6 @@ const Resumo = () => {
           ...doc.data()
         });
       });
-      
       setResumos(resumosCarregados);
     } catch (error) {
       console.error("Erro ao carregar resumos: ", error);
@@ -68,13 +66,11 @@ const Resumo = () => {
       window.alert("Parece que você esqueceu de inserir uma descrição!");
       return;
     }
-    
 
     const dataFormatada = formatarData(new Date());
 
     try {
       if (editando && idEdicao) {
-
         await updateDoc(doc(db, "resumos", idEdicao), {
           titulo,
           desc,
@@ -89,7 +85,7 @@ const Resumo = () => {
           data: new Date().toISOString()
 });
 
-        setResumos(resumos.map(resumo => 
+        setResumos(resumos.map(resumo =>
           resumo.id === idEdicao ? { ...resumo, titulo, desc, data: dataFormatada } : resumo
         ));
       } else {
@@ -100,7 +96,7 @@ const Resumo = () => {
           data: dataFormatada,
           criadoEm: new Date().toISOString(),
           atualizadoEm: new Date().toISOString(),
-          favoritos: [] 
+          favoritos: []
         });
 
         setResumos([...resumos, {
@@ -110,16 +106,17 @@ const Resumo = () => {
           data: dataFormatada,
           favoritos: []
         }]);
-          setSucesso(true);
+        setSucesso(true);
       }
+
       registrarEvento('criou_resumo', {
         titulo: titulo,
         Conteudo: desc,
         caracteres: desc.length,
         data: new Date().toISOString()
       });
-      incrementarContadorEvento('criou_resumo');
 
+      incrementarContadorEvento('criou_resumo');
 
       setTitulo("");
       setDesc("");
@@ -129,7 +126,7 @@ const Resumo = () => {
       console.error("Erro ao salvar resumo: ", error);
     }
   };
-  
+
   const deletarResumo = async (id) => {
     try {
       await deleteDoc(doc(db, "resumos", id));
@@ -151,7 +148,6 @@ const Resumo = () => {
     
   };
 
-  // FAVORITOS
   const toggleFavorito = async (resumoId, favoritos = []) => {
     if (!userId) return;
     const resumoRef = doc(db, "resumos", resumoId);
@@ -186,7 +182,30 @@ const Resumo = () => {
     return `${dia}/${mes < 10 ? '0' + mes : mes}`;
   };
 
-  
+  const handleImageUpload = async (event) => {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    try {
+      setDesc((prev) => prev + "\n[Processando imagem... aguarde]");
+
+      const { data: { text } } = await Tesseract.recognize(
+        file,
+        'por',
+        {
+          logger: m => console.log(m)
+        }
+      );
+
+      setDesc((prevDesc) => prevDesc.replace("[Processando imagem... aguarde]", "") + "\n" + text);
+      console.log('Texto extraído:', text);
+    } catch (error) {
+      console.error('Erro no OCR:', error);
+      alert('Erro ao processar a imagem. Tente novamente.');
+      setDesc((prevDesc) => prevDesc.replace("[Processando imagem... aguarde]", ""));
+    }
+  };
+
   const novoResumo = () => {
     setTitulo("");
     setDesc("");
@@ -197,7 +216,7 @@ const Resumo = () => {
   const autosaveTimeout = useRef(null);
 
   useEffect(() => {
-    if (!titulo.trim() && !desc.trim()) return; 
+    if (!titulo.trim() && !desc.trim()) return;
 
     if (autosaveTimeout.current) clearTimeout(autosaveTimeout.current);
 
@@ -210,9 +229,8 @@ const Resumo = () => {
     return () => clearTimeout(autosaveTimeout.current);
   }, [titulo, desc]);
 
-
   useEffect(() => {
-    const SpeechRecognition = window.SpeechRecognition ||  window.webkitSpeechRecognition;
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
 
     if (!SpeechRecognition) {
       console.warn('Este navegador não suporta a Web Speech API');
@@ -228,7 +246,7 @@ const Resumo = () => {
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const transcript = event.results[i][0].transcript;
         if (event.results[i].isFinal) {
-          setDesc((prevDesc) => prevDesc + '' + transcript);
+          setDesc((prevDesc) => prevDesc + ' ' + transcript);
         } else {
           interimTranscript += transcript;
         }
@@ -243,7 +261,7 @@ const Resumo = () => {
 
   const handleMicClick = () => {
     if (!recognitionRef.current) return;
-      
+
     if (isListening) {
       recognitionRef.current.stop();
     } else {
@@ -277,28 +295,31 @@ const Resumo = () => {
               </div>
             ))}
           </div>
+
           {sucesso && (
-          <div className='textosucesso' onClick={Desativar}>
-            <h1>Seu resumo foi salvo com sucesso !</h1>
-          </div>
+            <div className='textosucesso' onClick={Desativar}>
+              <h1>Seu resumo foi salvo com sucesso!</h1>
+            </div>
           )}
+
           <div className='blocodireito'>
-            <input 
-              type="text" 
-              className='inputTitulo' 
-              placeholder='Título' 
-              value={titulo} 
-              onChange={(e) => setTitulo(e.target.value)} 
+            <input
+              type="text"
+              className='inputTitulo'
+              placeholder='Título'
+              value={titulo}
+              onChange={(e) => setTitulo(e.target.value)}
             />
-            <textarea 
-              className='inputDescricao' 
-              placeholder='Digite aqui a descrição' 
+            <textarea
+              className='inputDescricao'
+              placeholder='Digite aqui a descrição'
               value={desc}
-              onChange={(e) => setDesc(e.target.value)} 
+              onChange={(e) => setDesc(e.target.value)}
             />
-            <button 
+
+            <button
               onClick={handleMicClick}
-              style = {{
+              style={{
                 padding: '10px 20px',
                 backgroundColor: isListening ? '#f44336' : '#4caf50',
                 color: 'white',
@@ -307,16 +328,24 @@ const Resumo = () => {
                 cursor: 'pointer',
                 marginTop: '10px'
               }}
-              >
-                {isListening ? 'Parar 🎤' : 'Iniciar 🎤'}
-              </button>
+            >
+              {isListening ? 'Parar 🎤' : 'Iniciar 🎤'}
+            </button>
 
-              <div style={{marginTop: '10px', fontSize: '14px', color: '#333'}}>
-                <strong>
-                  <br />Texto ao vivo:
-                </strong>
-                <p id="live-text" style={{background: '#eee', padding: '5px', minHeight: '20px'}}></p>
-              </div>
+            <label className="botao-upload">
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleImageUpload}
+                style={{ display: 'none' }}
+              />
+              <span>📸 Importar do caderno (foto)</span>
+            </label>
+
+            <div style={{ marginTop: '10px', fontSize: '14px', color: '#333' }}>
+              <strong><br />Texto ao vivo:</strong>
+              <p id="live-text" style={{ background: '#eee', padding: '5px', minHeight: '20px' }}></p>
+            </div>
 
             <button className='botao1' onClick={salvarResumo}>
               <img src="485.svg" className='imagem1' alt="Salvar" />

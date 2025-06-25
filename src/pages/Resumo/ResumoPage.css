@@ -1,0 +1,14 @@
+.botao-upload {
+  display: inline-block;
+  background-color: #2196f3;
+  color: white;
+  padding: 10px 20px;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  text-align: center;
+}
+
+.botao-upload:hover {
+  background-color: #1976d2;
+}

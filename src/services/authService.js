@@ -2,9 +2,13 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-  updateProfile,
-  signOut
+  updateProfile ,  signOut,
+  setPersistence,
+  browserLocalPersistence,
+  GoogleAuthProvider,
+  signInWithPopup
 } from "firebase/auth";
+
 import { app } from '../firebase/config';
 
 const auth = getAuth(app);
@@ -46,6 +50,7 @@ export const logoutUsuario = async () => {
 
 export const fazerLogin = async (email, senha) => {
   try {
+    await setPersistence(auth, browserLocalPersistence);
     const userCredential = await signInWithEmailAndPassword(auth, email, senha);
     return {
       success: true,
@@ -58,3 +63,26 @@ export const fazerLogin = async (email, senha) => {
     };
   }
 };
+
+export const loginWithGoogle = async () => {
+  const provider = new GoogleAuthProvider();
+  try {
+    await setPersistence(auth, browserLocalPersistence);
+    const result = await signInWithPopup(auth, provider);
+
+    return {
+      success: true,
+      user: result.user
+    };
+  } catch (error) {
+    return {
+      success: false,
+      error: error.message
+    };
+  }
+};
+
+/**
+ * Realiza o logout do usuário autenticado.
+ * @returns {Promise<void>}
+ */

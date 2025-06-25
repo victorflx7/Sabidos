@@ -13,29 +13,8 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
-<<<<<<< feature/google-auth
-
-=======
->>>>>>> develop
 const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
 const auth = getAuth(app)
-
-<<<<<<< feature/google-auth
-
 const db = getFirestore(app); // Inicializa o Firestore
-
-export {
-    db,
-    collection,
-    addDoc,
-    query,
-    onSnapshot,
-    app,
-    analytics,
-    logEvent,
-};
-=======
-const db = getFirestore(app); // Inicializa o Firestore
-
 export { db, collection, addDoc, query, onSnapshot, app, analytics, logEvent, auth };
->>>>>>> develop
+

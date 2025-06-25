@@ -84,3 +84,8 @@
     top: 35px;
     left: 30px;
 }
+
+.preferencias-perfil {
+    display: flex;
+    justify-content: center;
+}

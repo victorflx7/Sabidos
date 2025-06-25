@@ -2,16 +2,11 @@ import {
   getAuth,
   createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
-<<<<<<< feature/google-auth
   updateProfile ,  signOut,
   setPersistence,
   browserLocalPersistence,
   GoogleAuthProvider,
   signInWithPopup
-=======
-  updateProfile,
-  signOut
->>>>>>> develop
 } from "firebase/auth";
 
 import { app } from '../firebase/config';
@@ -67,7 +62,6 @@ export const fazerLogin = async (email, senha) => {
       error: error.message
     };
   }
-<<<<<<< feature/google-auth
 };
 
 export const loginWithGoogle = async () => {
@@ -101,6 +95,4 @@ export const logoutUsuario = async () => {
   } catch (error) {
     console.error("Erro ao fazer logout:", error);
   }
-=======
->>>>>>> develop
 };

@@ -1,12 +1,17 @@
-import { 
-  getAuth, 
-  createUserWithEmailAndPassword, 
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
+<<<<<<< feature/google-auth
   updateProfile ,  signOut,
   setPersistence,
   browserLocalPersistence,
   GoogleAuthProvider,
   signInWithPopup
+=======
+  updateProfile,
+  signOut
+>>>>>>> develop
 } from "firebase/auth";
 
 import { app } from '../firebase/config';
@@ -21,19 +26,30 @@ export const cadastrarUsuario = async (nome, email, senha) => {
       displayName: nome
     });
 
-      
-    // 3. Envia email de verificação (opcional)
-  //  await sendEmailVerification(userCredential.user);
 
-    return { 
+    // 3. Envia email de verificação (opcional)
+    //  await sendEmailVerification(userCredential.user);
+
+    return {
       success: true,
-      user: userCredential.user 
+      user: userCredential.user
     };
   } catch (error) {
     return {
       success: false,
       error: error.message
     };
+  }
+};
+
+export const logoutUsuario = async () => {
+  const auth = getAuth();
+
+  try {
+    await signOut(auth);
+    console.log("Usuário deslogado com sucesso.")
+  } catch (error) {
+    console.error("Erro ao fazer logout:", error)
   }
 };
 
@@ -51,6 +67,7 @@ export const fazerLogin = async (email, senha) => {
       error: error.message
     };
   }
+<<<<<<< feature/google-auth
 };
 
 export const loginWithGoogle = async () => {
@@ -84,4 +101,6 @@ export const logoutUsuario = async () => {
   } catch (error) {
     console.error("Erro ao fazer logout:", error);
   }
+=======
+>>>>>>> develop
 };

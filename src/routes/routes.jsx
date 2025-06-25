@@ -1,20 +1,22 @@
-// src/routes/routes.jsx
 import { Routes, Route } from 'react-router-dom';
-import { lazy , Suspense} from 'react';
+import { lazy, Suspense } from 'react';
+
 import PrivateRoute from './privateRoute';
 import Carregando from '../Components/Carregando/carregando';
 
-//import Home from '../pages/Home/home'
-const Home = lazy(() => import('../pages/Home/home'));
-const Cadastro = lazy(() => import('../pages/CadastroPage/cadastro')); 
-const Login = lazy(() => import('../pages/LoginPage/login'));
-const Dashboard = lazy(() => import('../pages/Dashboard/dashboard'));
-const AccountLayout = lazy(() => import('../layouts/AccountLayout'));
-const Resumo = lazy(() => import("../pages/Resumo/ResumoPage"));
-const Agenda = lazy(() => import("../pages/Agenda/AgendaPage"));
-const Pomodoro = lazy(() => import("../pages/Pomodoro/PomodoroPage"));
-const Perfil = lazy(() => import('../pages/PerfilPage/PerfilPage'));
-const Flashcard = lazy(() => import('../pages/Flashcard/flashcardPage'));
+
+
+import Home from '../pages/Home/home';
+import Cadastro from '../pages/CadastroPage/cadastro'
+import Login from '../pages/LoginPage/login'
+
+const Dashboard = lazy(() => import ('../pages/Dashboard/dashboard'));
+const AccountLayout = lazy(() => import ('../layouts/AccountLayout'));
+const Resumo = lazy(() => import ("../pages/Resumo/ResumoPage"));
+const Agenda = lazy(() => import ("../pages/Agenda/AgendaPage"));
+const Pomodoro = lazy(() => import ("../pages/Pomodoro/PomodoroPage"));
+const Perfil = lazy(() => import ('../pages/PerfilPage/PerfilPage'));
+const Flashcard = lazy(() => import ('../pages/Flashcard/flashcardPage'));
 
 export function AppRoutes() {
   return (

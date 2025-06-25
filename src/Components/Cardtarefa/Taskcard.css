@@ -1,0 +1,70 @@
+.task-card {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    margin-bottom: 10px;
+    border-left: 4px solid #ccc;
+}
+
+.task-card.prioridade-alta {
+    border-left-color: #ff6b6b;
+}
+
+.task-card.prioridade-media {
+    border-left-color: #feca57;
+}
+
+.task-card.prioridade-baixa {
+    border-left-color: #1dd1a1;
+}
+
+.task-header {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.task-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #333;
+}
+
+.task-date {
+    font-size: 14px;
+    color: #666;
+}
+
+.task-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.task-priority {
+    font-size: 12px;
+    text-transform: capitalize;
+    padding: 3px 8px;
+    border-radius: 12px;
+    background-color: #f0f0f0;
+}
+
+.status-button {
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.3s;
+}
+
+.status-button.pendente {
+    background-color: #ff9f43;
+    color: white;
+}
+
+.status-button.concluida {
+    background-color: #2ecc71;
+   color: white;
+}

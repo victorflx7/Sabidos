@@ -1,6 +1,7 @@
 // src/routes/routes.jsx
 
 import { Routes, Route } from 'react-router-dom'
+import PrivateRoute from './privateRoute';
 import Home from '../pages/Home/home'
 import Cadastro from '../pages/CadastroPage/cadastro'
 import Login from '../pages/LoginPage/login';
@@ -24,12 +25,12 @@ export function AppRoutes() {
       </Route>
 
 
-      <Route path="/dashboard" element={<Dashboard />} />
-      <Route path="/Resumo" element={<Resumo />} />
-      <Route path="/Agenda" element={<Agenda />} />
-      <Route path="/Pomodoro" element={<Pomodoro />} />
-      <Route path="/Perfil" element={<Perfil />} />
-      <Route path="/Flashcard" element={<Flashcard />} />
+      <Route path="/dashboard" element={<PrivateRoute><Dashboard /></PrivateRoute>} />
+      <Route path="/Resumo" element={<PrivateRoute><Resumo /></PrivateRoute>} />
+      <Route path="/Agenda" element={<PrivateRoute><Agenda /></PrivateRoute>} />
+      <Route path="/Pomodoro" element={<PrivateRoute><Pomodoro /></PrivateRoute>} />
+      <Route path="/Perfil" element={<PrivateRoute><Perfil /></PrivateRoute>} />
+      <Route path="/Flashcard" element={<PrivateRoute><Flashcard /></PrivateRoute>} />
 
 
 

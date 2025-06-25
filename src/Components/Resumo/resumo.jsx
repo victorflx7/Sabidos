@@ -5,6 +5,7 @@ import { db } from '../../firebase/config';
 import './resumo.css';
 import { registrarEvento } from '../../services/analytics/analyticsEvents'; 
 import { incrementarContadorEvento } from '../../services/analytics/analyticsEvents';
+import { enviarEventoGTM } from '../../services/analytics/gtm';
 
 const Resumo = () => {
   const [resumos, setResumos] = useState([]);
@@ -80,6 +81,13 @@ const Resumo = () => {
           data: dataFormatada,
           atualizadoEm: new Date().toISOString()
         });
+        
+        enviarEventoGTM('edicao_resumo', {
+          titulo: titulo,
+          Conteudo: desc,
+          caracteres: desc.length,
+          data: new Date().toISOString()
+});
 
         setResumos(resumos.map(resumo => 
           resumo.id === idEdicao ? { ...resumo, titulo, desc, data: dataFormatada } : resumo
@@ -138,7 +146,9 @@ const Resumo = () => {
       setDesc(resumoSelecionado.desc);
       setEditando(true);
       setIdEdicao(id);
+      
     }
+    
   };
 
   // FAVORITOS

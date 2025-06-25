@@ -2,24 +2,28 @@ import React, { useState } from 'react';
 import { fazerLogin } from '../../services/authService';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
+import { enviarEventoGTM } from '../../services/analytics/gtm';
 import './login.css'
 
 function Login() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
-    const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const result =  await fazerLogin(email, senha);
+      const result = await fazerLogin(email, senha);
       // Redireciona após login (use navigate ou estado global)
       if (result.success) {
+        enviarEventoGTM('login_usuario', {
+          Data : new Date().toISOString(),
+          metodo: 'email'
+        });
         alert('Login realizado com sucesso!');
         navigate('/dashboard'); // Redireciona para página interna
       } else {
@@ -30,11 +34,11 @@ function Login() {
     }
   };
 
-return (
-  
-     <div className="login-container">
+  return (
+
+    <div className="login-container">
       <header className="headerL">
-        <img className="logoL" src="LogoLogin.svg"  alt="logoExtensa" width="409px" height="153px" />
+        <img className="logoL" src="LogoLogin.svg" alt="logoExtensa" width="409px" height="153px" />
       </header>
       <br />
       <nav>
@@ -46,30 +50,30 @@ return (
           <form onSubmit={handleSubmit} className='formlog'>
             <input className="inputL" type="text" placeholder="Usuário" />
             <input className="inputL" type="email" name="" id="" placeholder="E-mail" value={email} onChange={(e) => setEmail(e.target.value)} />
-            <input className="inputL" type="password" name="password" id="password" placeholder="Senha"  value={senha} onChange={(e) => setSenha(e.target.value)}/>
-          <button type="submit" className="buttonLL"disabled={loading}>
-         {loading ? 'Entrando....'  : 'Entrar'}
+            <input className="inputL" type="password" name="password" id="password" placeholder="Senha" value={senha} onChange={(e) => setSenha(e.target.value)} />
+            <button type="submit" className="buttonLL" disabled={loading}>
+              {loading ? 'Entrando....' : 'Entrar'}
             </button>
-      {erro && <p className="erro">{erro}</p>}
+            {erro && <p className="erro">{erro}</p>}
           </form>
         </div>
-        
+
         <div id="d3-log">
         </div>
         <div id="d4-log">
           <p id="p">Ainda não possui uma conta?</p>
         </div>
         <div id="d5-log">
-          
-        <Link to="/cadastro" id="a">Cadastre-se</Link>
+
+          <Link to="/cadastro" id="a">Cadastre-se</Link>
 
         </div>
       </main>
-      
+
     </div>
-    
-     
-    
+
+
+
   )
 
 

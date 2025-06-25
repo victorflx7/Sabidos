@@ -1,11 +1,9 @@
-
 import { Routes, Route } from 'react-router-dom';
 import { lazy, Suspense } from 'react';
 
-
 import PrivateRoute from './privateRoute';
-
 import Carregando from '../Components/Carregando/carregando';
+
 
 
 import Home from '../pages/Home/home';

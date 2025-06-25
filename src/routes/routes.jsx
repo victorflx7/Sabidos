@@ -1,4 +1,5 @@
 // src/routes/routes.jsx
+
 import { Routes, Route } from 'react-router-dom'
 import Home from '../pages/Home/home'
 import Cadastro from '../pages/CadastroPage/cadastro'

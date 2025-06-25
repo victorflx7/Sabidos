@@ -12,10 +12,10 @@ const firebaseConfig = {
     measurementId: "G-T6L50TVSH5",
 };
 
+const app = initializeApp(firebaseConfig);
 const analytics = typeof window !== 'undefined' ? getAnalytics(app) : null;
 
 
-const app = initializeApp(firebaseConfig);
 const db = getFirestore(app); // Inicializa o Firestore
 
 export { db, collection, addDoc, query, onSnapshot, app , analytics, logEvent };

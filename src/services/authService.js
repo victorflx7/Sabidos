@@ -22,8 +22,6 @@ export const cadastrarUsuario = async (nome, email, senha) => {
     });
 
       
-    // 3. Envia email de verificação (opcional)
-  //  await sendEmailVerification(userCredential.user);
 
     return { 
       success: true,

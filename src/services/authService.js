@@ -36,7 +36,7 @@ export const cadastrarUsuario = async (nome, email, senha) => {
     await setPersistence(auth, browserLocalPersistence);
     const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
 
-  
+
     await updateProfile(userCredential.user, {
       displayName: nome
     });
@@ -62,6 +62,7 @@ export const fazerLogin = async (email, senha) => {
     await setPersistence(auth, browserLocalPersistence);
     const userCredential = await signInWithEmailAndPassword(auth, email, senha);
 
+
     await criarPerfilUsuario(userCredential.user);
 
     return {
@@ -83,7 +84,7 @@ export const loginWithGoogle = async () => {
     await setPersistence(auth, browserLocalPersistence);
     const result = await signInWithPopup(auth, provider);
 
-    
+
     await criarPerfilUsuario(result.user);
 
     return {
@@ -97,6 +98,7 @@ export const loginWithGoogle = async () => {
     };
   }
 };
+
 
 
 export const logoutUsuario = async () => {

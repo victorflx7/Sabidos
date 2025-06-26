@@ -43,6 +43,7 @@ export const cadastrarUsuario = async (nome, email, senha) => {
 
     await criarPerfilUsuario(userCredential.user);
 
+
     return {
       success: true,
       user: userCredential.user
@@ -98,8 +99,9 @@ export const loginWithGoogle = async () => {
 };
 
 
-
 export const logoutUsuario = async () => {
+  const auth = getAuth();
+
   try {
     await signOut(auth);
     console.log("Usuário deslogado com sucesso.");
@@ -107,6 +109,4 @@ export const logoutUsuario = async () => {
     console.error("Erro ao fazer logout:", error);
   }
 };
-
-
 

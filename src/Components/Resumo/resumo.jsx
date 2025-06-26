@@ -1,8 +1,6 @@
-<<<<<<< feature/busca-resumos
 
-=======
 import { jsPDF } from 'jspdf';
->>>>>>> develop
+
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { jsPDF } from 'jspdf';
 import { getAuth } from 'firebase/auth';

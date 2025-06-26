@@ -2,24 +2,28 @@ import React, { useState } from 'react';
 import { fazerLogin, loginWithGoogle } from '../../services/authService';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-
+import { enviarEventoGTM } from '../../services/analytics/gtm';
 import './login.css';
 
 function Login() {
   const [email, setEmail] = useState('');
   const [senha, setSenha] = useState('');
   const [erro, setErro] = useState('');
-    const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
+  const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     try {
-      const result =  await fazerLogin(email, senha);
+      const result = await fazerLogin(email, senha);
       // Redireciona após login (use navigate ou estado global)
       if (result.success) {
+        enviarEventoGTM('login_usuario', {
+          Data : new Date().toISOString(),
+          metodo: 'email'
+        });
         alert('Login realizado com sucesso!');
         navigate('/dashboard'); // Redireciona para página interna
       } else {
@@ -29,7 +33,6 @@ function Login() {
       setErro("Falha no login: " + error.message);
     }
   };
-
    const handleGoogleLogin = async () => {
     setLoading(true);
     try {
@@ -105,11 +108,9 @@ function Login() {
               />
               {loading ? 'Entrando...' : 'Entrar com Google'}
             </button>
-
             {erro && <p className="erro">{erro}</p>}
           </form>
         </div>
-
         <div id="d3-log"></div>
         <div id="d4-log">
           <p id="p">Ainda não possui uma conta?</p>

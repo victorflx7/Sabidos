@@ -3,7 +3,7 @@ import { getAuth } from "firebase/auth";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from '../../firebase/config'; 
 import './CircularTimer.css';
-
+import { enviarEventoGTM } from '../../services/analytics/gtm';
 const ProgressoCircular = () => {
  
   const [tempo, setTempo] = useState(0);
@@ -74,6 +74,11 @@ const ProgressoCircular = () => {
     setTempoMaximo(segundos);
     setModoDescanso(false);
     setAtivo(true);
+
+    enviarEventoGTM('pomodoro_iniciado', {
+  tempo: segundos +" segundos",
+});
+
   };
 
   const iniciarDescanso = () => {

@@ -2,21 +2,20 @@
     background-color: #060423;
     height: 100vh;
     display: flex;
-    justify-content: center;
     align-items: center;
+    justify-content: center;
 }
-
 .carregando-giro{
     width: 60px;
     height: 60px;
     border: 8px solid #ffffff22;
     border-top: 8px solid #fff;
     border-radius: 50%;
-    animation: spin 1s linear infinite
+    animation:  gira 1s linear infinite;
 }
 
-@keyframes spin {
-    to {
+@keyframes gira {
+    to{
         transform: rotate(360deg);
     }
 }

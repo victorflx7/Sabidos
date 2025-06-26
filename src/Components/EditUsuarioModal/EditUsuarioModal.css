@@ -1,0 +1,40 @@
+.modal-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 99;
+}
+
+.modal {
+    background: #2E293D;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    height: 50%;
+    display: flex;
+    flex-direction: column;
+    color: #eaeaea;
+    position: relative;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.7);
+    border: 2px solid #1b152a;
+
+}
+
+h2 {
+    margin-bottom: 1rem;
+    color: #eaeaea;
+}
+
+p {
+    margin: 1rem 0;
+}
+
+.botoes {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}

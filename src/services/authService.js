@@ -16,9 +16,7 @@ import { doc, getDoc, setDoc } from "firebase/firestore";
 
 const auth = getAuth(app);
 
-/**
- * Cria um documento do perfil do usuário no Firestore em /usuarios/{uid}
- */
+
 export const criarPerfilUsuario = async (user) => {
   const docRef = doc(db, "usuarios", user.uid);
   const docSnap = await getDoc(docRef);
@@ -43,7 +41,6 @@ export const cadastrarUsuario = async (nome, email, senha) => {
       displayName: nome
     });
 
-    // Cria o perfil do usuário no Firestore
     await criarPerfilUsuario(userCredential.user);
 
     return {
@@ -102,6 +99,7 @@ export const loginWithGoogle = async () => {
 };
 
 
+
 export const logoutUsuario = async () => {
   try {
     await signOut(auth);
@@ -110,3 +108,4 @@ export const logoutUsuario = async () => {
     console.error("Erro ao fazer logout:", error);
   }
 };
+

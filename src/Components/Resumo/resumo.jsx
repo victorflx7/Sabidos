@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { getAuth } from 'firebase/auth';
-import { collection, addDoc, query, where, getDocs, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { collection, addDoc, query, getDocs, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import './resumo.css';
 import { incrementarContadorEvento} from '../../services/analytics/analyticsEvents'; 
@@ -17,61 +17,48 @@ const Resumo = () => {
   const [editando, setEditando] = useState(false);
   const [idEdicao, setIdEdicao] = useState(null);
   const [sucesso, setSucesso] = useState(false);
+  const autosaveTimeout = useRef(null);
 
   const auth = getAuth();
   const user = auth.currentUser;
-  const userId = user?.uid;
 
-  const Desativar = () => {
-    setSucesso(false);
-  };
+  if (!user) {
+    console.error("Usuário não autenticado!");
+    return null;
+  }
+
+  const uid = user.uid;
+
+  const Desativar = () => setSucesso(false);
 
   useEffect(() => {
-    if (userId) {
-      carregarResumos();
-    }
-  }, [userId]);
+    carregarResumos();
+  }, [uid]);
 
   const carregarResumos = async () => {
     try {
-      const q = query(collection(db, "resumos"), where("userId", "==", userId));
+      const q = query(collection(db, "resumos", uid, "dados"));
       const querySnapshot = await getDocs(q);
-      const resumosCarregados = [];
-      querySnapshot.forEach((doc) => {
-        resumosCarregados.push({
-          id: doc.id,
-          ...doc.data()
-        });
-      });
+      const resumosCarregados = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
       setResumos(resumosCarregados);
     } catch (error) {
       console.error("Erro ao carregar resumos: ", error);
     }
   };
 
-  const salvarResumo = async (e) => {
-    if (e && e.preventDefault) e.preventDefault();
-
-    if (!titulo.trim() && !desc.trim()) {
-      window.alert("Sem título, nem descrição? Aí você me quebra, sabido!");
-      return;
-    }
-
-    if (!titulo.trim()) {
-      window.alert("Parece que você esqueceu de inserir um título!");
-      return;
-    }
-
-    if (!desc.trim()) {
-      window.alert("Parece que você esqueceu de inserir uma descrição!");
+  const salvarResumo = useCallback(async (e) => {
+    if (e?.preventDefault) e.preventDefault();
+    if (!titulo.trim() || !desc.trim()) {
+      alert("Preencha título e descrição.");
       return;
     }
 
     const dataFormatada = formatarData(new Date());
 
     try {
-      if (editando) {
-        await updateDoc(doc(db, "resumos", idEdicao), {
+      if (editando && idEdicao) {
+        await updateDoc(doc(db, "resumos", uid, "dados", idEdicao), {
+
           titulo,
           desc,
           data: dataFormatada,
@@ -85,12 +72,9 @@ const Resumo = () => {
           data: new Date().toISOString()
 });
 
-        setResumos(resumos.map(resumo =>
-          resumo.id === idEdicao ? { ...resumo, titulo, desc, data: dataFormatada } : resumo
-        ));
+        setResumos(resumos.map(resumo => resumo.id === idEdicao ? { ...resumo, titulo, desc, data: dataFormatada } : resumo));
       } else {
-        const docRef = await addDoc(collection(db, "resumos"), {
-          userId,
+        const docRef = await addDoc(collection(db, "resumos", uid, "dados"), {
           titulo,
           desc,
           data: dataFormatada,
@@ -99,24 +83,17 @@ const Resumo = () => {
           favoritos: []
         });
 
-        setResumos((prev) => [...prev, {
-          id: docRef.id,
-          titulo,
-          desc,
-          data: dataFormatada,
-          favoritos: []
-        }]);
+
+        setResumos([...resumos, { id: docRef.id, titulo, desc, data: dataFormatada, favoritos: [] }]);
+
         setSucesso(true);
 
         await incrementarContadorEvento(userId, 'resumos');
       }
 
-      registrarEvento('criou_resumo', {
-        titulo: titulo,
-        Conteudo: desc,
-        caracteres: desc.length,
-        data: new Date().toISOString()
-      });
+
+      registrarEvento('criou_resumo', { titulo, Conteudo: desc, caracteres: desc.length, data: new Date().toISOString() });
+      incrementarContadorEvento('criou_resumo');
 
 
       setTitulo("");
@@ -126,11 +103,11 @@ const Resumo = () => {
     } catch (error) {
       console.error("Erro ao salvar resumo: ", error);
     }
-  };
+  }, [titulo, desc, editando, idEdicao, resumos, uid]);
 
   const deletarResumo = async (id) => {
     try {
-      await deleteDoc(doc(db, "resumos", id));
+      await deleteDoc(doc(db, "resumos", uid, "dados", id));
       setResumos(resumos.filter(resumo => resumo.id !== id));
     } catch (error) {
       console.error("Erro ao deletar resumo: ", error);
@@ -150,56 +127,30 @@ const Resumo = () => {
   };
 
   const toggleFavorito = async (resumoId, favoritos = []) => {
-    if (!userId) return;
-    const resumoRef = doc(db, "resumos", resumoId);
+    const resumoRef = doc(db, "resumos", uid, "dados", resumoId);
     try {
-      if (favoritos.includes(userId)) {
-        await updateDoc(resumoRef, {
-          favoritos: arrayRemove(userId)
-        });
-        setResumos(resumos.map(r =>
-          r.id === resumoId
-            ? { ...r, favoritos: r.favoritos?.filter(fav => fav !== userId) }
-            : r
-        ));
+      if (favoritos.includes(uid)) {
+        await updateDoc(resumoRef, { favoritos: arrayRemove(uid) });
+        setResumos(resumos.map(r => r.id === resumoId ? { ...r, favoritos: r.favoritos.filter(fav => fav !== uid) } : r));
       } else {
-        await updateDoc(resumoRef, {
-          favoritos: arrayUnion(userId)
-        });
-        setResumos(resumos.map(r =>
-          r.id === resumoId
-            ? { ...r, favoritos: [...(r.favoritos || []), userId] }
-            : r
-        ));
+        await updateDoc(resumoRef, { favoritos: arrayUnion(uid) });
+        setResumos(resumos.map(r => r.id === resumoId ? { ...r, favoritos: [...(r.favoritos || []), uid] } : r));
       }
     } catch (error) {
       console.error("Erro ao atualizar favorito:", error);
     }
   };
 
-  const formatarData = (data) => {
-    const dia = data.getDate();
-    const mes = data.getMonth() + 1;
-    return `${dia}/${mes < 10 ? '0' + mes : mes}`;
-  };
+  const formatarData = (data) => `${data.getDate()}/${(data.getMonth() + 1).toString().padStart(2, '0')}`;
 
   const handleImageUpload = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
 
+    setDesc((prev) => prev + "\n[Processando imagem... aguarde]");
     try {
-      setDesc((prev) => prev + "\n[Processando imagem... aguarde]");
-
-      const { data: { text } } = await Tesseract.recognize(
-        file,
-        'por',
-        {
-          logger: m => console.log(m)
-        }
-      );
-
+      const { data: { text } } = await Tesseract.recognize(file, 'por');
       setDesc((prevDesc) => prevDesc.replace("[Processando imagem... aguarde]", "") + "\n" + text);
-      console.log('Texto extraído:', text);
     } catch (error) {
       console.error('Erro no OCR:', error);
       alert('Erro ao processar a imagem. Tente novamente.');
@@ -207,18 +158,7 @@ const Resumo = () => {
     }
   };
 
-  const novoResumo = () => {
-    setTitulo("");
-    setDesc("");
-    setEditando(false);
-    setIdEdicao(null);
-  };
-
-  const autosaveTimeout = useRef(null);
-
   useEffect(() => {
-    if (!titulo.trim() && !desc.trim()) return;
-
     if (autosaveTimeout.current) clearTimeout(autosaveTimeout.current);
 
     autosaveTimeout.current = setTimeout(() => {
@@ -228,15 +168,12 @@ const Resumo = () => {
     }, 3000);
 
     return () => clearTimeout(autosaveTimeout.current);
-  }, [titulo, desc]);
+  }, [titulo, desc, salvarResumo]);
 
   useEffect(() => {
     const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) return;
 
-    if (!SpeechRecognition) {
-      console.warn('Este navegador não suporta a Web Speech API');
-      return;
-    }
     const recognition = new SpeechRecognition();
     recognition.lang = 'pt-BR';
     recognition.continuous = true;
@@ -247,7 +184,7 @@ const Resumo = () => {
       for (let i = event.resultIndex; i < event.results.length; i++) {
         const transcript = event.results[i][0].transcript;
         if (event.results[i].isFinal) {
-          setDesc((prevDesc) => prevDesc + ' ' + transcript);
+          setDesc((prev) => prev + ' ' + transcript);
         } else {
           interimTranscript += transcript;
         }
@@ -257,12 +194,10 @@ const Resumo = () => {
     };
 
     recognitionRef.current = recognition;
-
   }, []);
 
   const handleMicClick = () => {
     if (!recognitionRef.current) return;
-
     if (isListening) {
       recognitionRef.current.stop();
     } else {
@@ -286,9 +221,9 @@ const Resumo = () => {
                   <button className='btn_del' onClick={() => deletarResumo(resumo.id)}>X</button>
                   <button className='btn_edt' onClick={() => editarResumo(resumo.id)}>O</button>
                   <button
-                    className={`btn_fav ${resumo.favoritos?.includes(userId) ? 'favorito' : ''}`}
+                    className={`btn_fav ${resumo.favoritos?.includes(uid) ? 'favorito' : ''}`}
                     onClick={() => toggleFavorito(resumo.id, resumo.favoritos || [])}
-                    title={resumo.favoritos?.includes(userId) ? "Remover dos favoritos" : "Adicionar aos favoritos"}
+                    title={resumo.favoritos?.includes(uid) ? "Remover dos favoritos" : "Adicionar aos favoritos"}
                   >
                     ★
                   </button>
@@ -318,28 +253,12 @@ const Resumo = () => {
               onChange={(e) => setDesc(e.target.value)}
             />
 
-            <button
-              onClick={handleMicClick}
-              style={{
-                padding: '10px 20px',
-                backgroundColor: isListening ? '#f44336' : '#4caf50',
-                color: 'white',
-                border: 'none',
-                borderRadius: '5px',
-                cursor: 'pointer',
-                marginTop: '10px'
-              }}
-            >
+            <button onClick={handleMicClick} style={{ padding: '10px 20px', backgroundColor: isListening ? '#f44336' : '#4caf50', color: 'white', border: 'none', borderRadius: '5px', cursor: 'pointer', marginTop: '10px' }}>
               {isListening ? 'Parar 🎤' : 'Iniciar 🎤'}
             </button>
 
             <label className="botao-upload">
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleImageUpload}
-                style={{ display: 'none' }}
-              />
+              <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} />
               <span>📸 Importar do caderno (foto)</span>
             </label>
 

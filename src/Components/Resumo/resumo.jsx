@@ -3,8 +3,8 @@ import { getAuth } from 'firebase/auth';
 import { collection, addDoc, query, getDocs, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import './resumo.css';
-import { registrarEvento } from '../../services/analytics/analyticsEvents'; 
-import { incrementarContadorEvento } from '../../services/analytics/analyticsEvents';
+import { incrementarContadorEvento} from '../../services/analytics/analyticsEvents'; 
+import { registrarEvento } from '../../services/analytics/analyticsEvents';
 import { enviarEventoGTM } from '../../services/analytics/gtm';
 import Tesseract from 'tesseract.js';
 
@@ -58,6 +58,7 @@ const Resumo = () => {
     try {
       if (editando && idEdicao) {
         await updateDoc(doc(db, "resumos", uid, "dados", idEdicao), {
+
           titulo,
           desc,
           data: dataFormatada,
@@ -82,12 +83,18 @@ const Resumo = () => {
           favoritos: []
         });
 
+
         setResumos([...resumos, { id: docRef.id, titulo, desc, data: dataFormatada, favoritos: [] }]);
+
         setSucesso(true);
+
+        await incrementarContadorEvento(userId, 'resumos');
       }
+
 
       registrarEvento('criou_resumo', { titulo, Conteudo: desc, caracteres: desc.length, data: new Date().toISOString() });
       incrementarContadorEvento('criou_resumo');
+
 
       setTitulo("");
       setDesc("");

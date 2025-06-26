@@ -36,12 +36,13 @@ export const cadastrarUsuario = async (nome, email, senha) => {
     await setPersistence(auth, browserLocalPersistence);
     const userCredential = await createUserWithEmailAndPassword(auth, email, senha);
 
-    // Atualiza nome de exibição do usuário
+
     await updateProfile(userCredential.user, {
       displayName: nome
     });
 
     await criarPerfilUsuario(userCredential.user);
+
 
     return {
       success: true,
@@ -61,7 +62,7 @@ export const fazerLogin = async (email, senha) => {
     await setPersistence(auth, browserLocalPersistence);
     const userCredential = await signInWithEmailAndPassword(auth, email, senha);
 
-    // Garante que o perfil do usuário esteja no Firestore
+
     await criarPerfilUsuario(userCredential.user);
 
     return {
@@ -83,7 +84,7 @@ export const loginWithGoogle = async () => {
     await setPersistence(auth, browserLocalPersistence);
     const result = await signInWithPopup(auth, provider);
 
-    // Cria perfil no Firestore, se necessário
+
     await criarPerfilUsuario(result.user);
 
     return {
@@ -101,6 +102,8 @@ export const loginWithGoogle = async () => {
 
 
 export const logoutUsuario = async () => {
+  const auth = getAuth();
+
   try {
     await signOut(auth);
     console.log("Usuário deslogado com sucesso.");

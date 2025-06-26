@@ -1,3 +1,300 @@
-main{
-    height: 90vh;
+/* ESTILO GERAL */
+body {
+  margin: 0;
+  padding: 0;
+  background: #060423;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* CONTAINER PRINCIPAL */
+.agenda {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.titulo {
+  text-align: center;
+  color: #FBCB4E;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.main-agenda {
+  display: flex;
+  gap: 30px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* CALENDÁRIO */
+.calendar-container {
+  width: 480px;
+  background: #292535;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15px;
+}
+
+.calendar-header button {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.calendar-header button img {
+  width: 20px;
+  height: 20px;
+}
+
+#monthYear {
+  font-size: 1.5rem;
+  color: #FBCB4E;
+  display: flex;
+  gap: 5px;
+  font-weight: 600;
+  text-transform: capitalize;
+}
+
+.calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  margin-bottom: 5px;
+}
+
+.weekday {
+  padding: 8px;
+  font-weight: bold;
+  color: #ccc;
+  font-size: 16px;
+}
+
+.calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+.day {
+  aspect-ratio: 1;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  font-size: 18px;
+  color: white;
+  background-color: rgba(255, 255, 255, 0.05);
+  position: relative;
+}
+
+.day:hover {
+  background-color: #FBCB4E;
+  color: #000;
+}
+
+.day.today {
+  border: 2px solid #FBCB4E;
+  font-weight: bold;
+}
+
+/* MARCADORES */
+.day-indicator {
+  position: absolute;
+  bottom: 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+.day.has-event .day-indicator {
+  background-color: #3498db;
+}
+
+.day.has-task .day-indicator {
+  background-color: #2ecc71;
+}
+
+.day.has-event.has-task .day-indicator {
+  background: linear-gradient(90deg, #3498db 50%, #2ecc71 50%);
+}
+
+/* BOTÕES */
+.box-btnadd {
+  margin-top: 20px;
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+}
+
+.btnadd, .btnadd-task {
+  flex: 1;
+  font-size: 16px;
+  font-weight: 600;
+  padding: 12px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.btnadd {
+  background-color: #FBCB4E;
+  color: #000;
+}
+
+.btnadd:hover {
+  background-color: #e6b63c;
+}
+
+.btnadd-task {
+  background-color: #3498db;
+  color: white;
+}
+
+.btnadd-task:hover {
+  background-color: #2980b9;
+}
+
+/* MODAL */
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: #292535;
+  padding: 25px;
+  border-radius: 10px;
+  width: 90%;
+  max-width: 400px;
+  color: white;
+}
+
+.modal-content h2 {
+  margin-top: 0;
+  color: #FBCB4E;
+}
+
+.modal-content form label {
+  display: block;
+  margin: 15px 0 5px;
+  color: #FBCB4E;
+}
+
+.modal-content form input,
+.modal-content form select {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 6px;
+  background: #1a1a1a;
+  color: white;
+}
+
+#btnSalvar, #btnSalvarTask {
+  margin-top: 20px;
+  width: 100%;
+  padding: 12px;
+  background-color: #FBCB4E;
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#btnSalvar:hover, #btnSalvarTask:hover {
+  background-color: #e6b63c;
+}
+
+.close {
+  float: right;
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+}
+
+.close:hover {
+  color: #FBCB4E;
+}
+
+/* ÁREA DE EVENTOS E TAREFAS */
+.agenda-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 320px;
+}
+
+.events-container,
+.tasks-container {
+  background: #292535;
+  border-radius: 10px;
+  padding: 20px;
+  color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.events-container h3,
+.tasks-container h3 {
+  margin: 0 0 10px;
+  font-size: 1.4rem;
+  color: #FBCB4E;
+  border-bottom: 1px solid #555;
+  padding-bottom: 5px;
+}
+
+.events-box {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.event-item {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+  padding: 10px;
+}
+
+.event-date {
+  color: #FBCB4E;
+  font-size: 0.9rem;
+}
+
+.event-title {
+  color: white;
+  font-size: 1rem;
+  margin-top: 5px;
+}
+
+/* SCROLLBAR */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #555;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #FBCB4E;
 }

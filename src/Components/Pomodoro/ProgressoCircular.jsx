@@ -3,7 +3,8 @@ import { getAuth } from "firebase/auth";
 import { addDoc, collection } from "firebase/firestore";
 import { db } from '../../firebase/config'; 
 import './CircularTimer.css';
-
+import { enviarEventoGTM } from '../../services/analytics/gtm';
+import { incrementarContadorEvento } from '../../services/analytics/analyticsEvents';
 const ProgressoCircular = () => {
  
   const [tempo, setTempo] = useState(0);
@@ -32,7 +33,7 @@ const ProgressoCircular = () => {
 
   useEffect(() => {
     let intervalo = null;
-
+    const executarEfeitos = async () => {
     if (ativo && !pausado && tempo > 0) {
       intervalo = setInterval(() => {
         setTempo((t) => t - 1);
@@ -43,6 +44,7 @@ const ProgressoCircular = () => {
         audioFoco.current?.play();
         setTemposTrabalho([...temposTrabalho, formatarTempo(tempoMaximo)]);
         iniciarDescanso();
+        
       } else {
         
         setTemposDescanso([...temposDescanso, formatarTempo(tempoMaximo)]);
@@ -59,6 +61,9 @@ const ProgressoCircular = () => {
         }
       }
     }
+  };
+
+  executarEfeitos();
 
     return () => clearInterval(intervalo);
   }, [ativo, pausado, tempo, cicloAtual, ciclos]);
@@ -74,6 +79,11 @@ const ProgressoCircular = () => {
     setTempoMaximo(segundos);
     setModoDescanso(false);
     setAtivo(true);
+
+    enviarEventoGTM('pomodoro_iniciado', {
+  tempo: segundos +" segundos",
+});
+
   };
 
   const iniciarDescanso = () => {

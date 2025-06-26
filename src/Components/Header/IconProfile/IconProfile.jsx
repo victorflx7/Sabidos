@@ -6,6 +6,7 @@ import { getAuth } from "firebase/auth";
 import { backupUserData } from "../../../services/backupService";
 import { useState } from 'react';
 
+
 function IconProfile() {
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);

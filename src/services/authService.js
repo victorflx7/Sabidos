@@ -1,6 +1,6 @@
-import { 
-  getAuth, 
-  createUserWithEmailAndPassword, 
+import {
+  getAuth,
+  createUserWithEmailAndPassword,
   signInWithEmailAndPassword,
   updateProfile ,  signOut,
   setPersistence,
@@ -21,17 +21,27 @@ export const cadastrarUsuario = async (nome, email, senha) => {
       displayName: nome
     });
 
-      
 
-    return { 
+    return {
       success: true,
-      user: userCredential.user 
+      user: userCredential.user
     };
   } catch (error) {
     return {
       success: false,
       error: error.message
     };
+  }
+};
+
+export const logoutUsuario = async () => {
+  const auth = getAuth();
+
+  try {
+    await signOut(auth);
+    console.log("Usuário deslogado com sucesso.")
+  } catch (error) {
+    console.error("Erro ao fazer logout:", error)
   }
 };
 
@@ -83,3 +93,4 @@ export const logoutUsuario = async () => {
     console.error("Erro ao fazer logout:", error);
   }
 };
+

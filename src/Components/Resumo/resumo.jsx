@@ -3,7 +3,9 @@ import { getAuth } from 'firebase/auth';
 import { collection, addDoc, query, where, getDocs, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import './resumo.css';
-import { registrarEvento, incrementarContadorEvento } from '../../services/analytics/analyticsEvents';
+import { incrementarContadorEvento} from '../../services/analytics/analyticsEvents'; 
+import { registrarEvento } from '../../services/analytics/analyticsEvents';
+import { enviarEventoGTM } from '../../services/analytics/gtm';
 import Tesseract from 'tesseract.js';
 
 const Resumo = () => {
@@ -68,13 +70,20 @@ const Resumo = () => {
     const dataFormatada = formatarData(new Date());
 
     try {
-      if (editando && idEdicao) {
+      if (editando) {
         await updateDoc(doc(db, "resumos", idEdicao), {
           titulo,
           desc,
           data: dataFormatada,
           atualizadoEm: new Date().toISOString()
         });
+        
+        enviarEventoGTM('edicao_resumo', {
+          titulo: titulo,
+          Conteudo: desc,
+          caracteres: desc.length,
+          data: new Date().toISOString()
+});
 
         setResumos(resumos.map(resumo =>
           resumo.id === idEdicao ? { ...resumo, titulo, desc, data: dataFormatada } : resumo
@@ -90,7 +99,7 @@ const Resumo = () => {
           favoritos: []
         });
 
-        setResumos([...resumos, {
+        setResumos((prev) => [...prev, {
           id: docRef.id,
           titulo,
           desc,
@@ -98,6 +107,8 @@ const Resumo = () => {
           favoritos: []
         }]);
         setSucesso(true);
+
+        await incrementarContadorEvento(userId, 'resumos');
       }
 
       registrarEvento('criou_resumo', {
@@ -107,7 +118,6 @@ const Resumo = () => {
         data: new Date().toISOString()
       });
 
-      incrementarContadorEvento('criou_resumo');
 
       setTitulo("");
       setDesc("");
@@ -134,7 +144,9 @@ const Resumo = () => {
       setDesc(resumoSelecionado.desc);
       setEditando(true);
       setIdEdicao(id);
+      
     }
+    
   };
 
   const toggleFavorito = async (resumoId, favoritos = []) => {

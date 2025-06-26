@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
+import EditUsuarioModal from '../EditUsuarioModal/EditUsuarioModal';
 import './Perfil.css';
 
 const Profile = () => {
+  const [mostrarModal, setMostrarModal] = useState(false)
   return (
     <main className="Perfil">
+      {mostrarModal && <EditUsuarioModal onClose={() => setMostrarModal(false)} />}
     <div className="Perfil-container">
       
       <div className="box1">
@@ -22,6 +25,7 @@ const Profile = () => {
           <h3 className='email'>Email</h3>
           <p className='email2'>alexxx@gmail.com</p>
         </div>
+      <div className='preferencias-perfil'><button onClick={() => setMostrarModal(true)}>Preferências</button></div>
       </div>
     </div>
     </main>

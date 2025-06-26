@@ -1,10 +1,11 @@
+import { jsPDF } from 'jspdf';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { getAuth } from 'firebase/auth';
 import { collection, addDoc, query, getDocs, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import './resumo.css';
-import { incrementarContadorEvento} from '../../services/analytics/analyticsEvents'; 
 import { registrarEvento } from '../../services/analytics/analyticsEvents';
+import { incrementarContadorEvento } from '../../services/analytics/analyticsEvents';
 import { enviarEventoGTM } from '../../services/analytics/gtm';
 import Tesseract from 'tesseract.js';
 
@@ -64,13 +65,13 @@ const Resumo = () => {
           data: dataFormatada,
           atualizadoEm: new Date().toISOString()
         });
-        
+
         enviarEventoGTM('edicao_resumo', {
           titulo: titulo,
           Conteudo: desc,
           caracteres: desc.length,
           data: new Date().toISOString()
-});
+        });
 
         setResumos(resumos.map(resumo => resumo.id === idEdicao ? { ...resumo, titulo, desc, data: dataFormatada } : resumo));
       } else {
@@ -121,9 +122,9 @@ const Resumo = () => {
       setDesc(resumoSelecionado.desc);
       setEditando(true);
       setIdEdicao(id);
-      
+
     }
-    
+
   };
 
   const toggleFavorito = async (resumoId, favoritos = []) => {
@@ -163,7 +164,7 @@ const Resumo = () => {
 
     autosaveTimeout.current = setTimeout(() => {
       if (titulo.trim() && desc.trim()) {
-        salvarResumo({ preventDefault: () => {} });
+        salvarResumo({ preventDefault: () => { } });
       }
     }, 3000);
 
@@ -206,6 +207,43 @@ const Resumo = () => {
     }
     setIsListening(!isListening);
   };
+
+  const exportarPDF = (titulo, desc) => {
+    const doc = new jsPDF();
+
+    const marginLeft = 15;
+    let marginTop = 20;
+    const lineHeight = 7;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const maxWidth = pageWidth - marginLeft * 2;
+
+    doc.setFontSize(20);
+    doc.setFont('helvetica', 'bold');
+    const tituloLines = doc.splitTextToSize(titulo, maxWidth);
+    doc.text(tituloLines, marginLeft, marginTop);
+    marginTop += tituloLines.length * lineHeight + 10;
+
+    doc.setFontSize(12);
+    doc.setFont('helvetica', 'normal');
+    const descLines = doc.splitTextToSize(desc, maxWidth);
+
+    let remainingText = [...descLines]
+    while(remainingText.length > 0) {
+      const spaceLeft = doc.internal.pageSize.getHeight() - marginTop - 20;
+      const linesThatFit = Math.floor(spaceLeft / lineHeight);
+      const textToAdd = remainingText.slice(0, linesThatFit);
+
+      doc.text(textToAdd, marginLeft, marginTop);
+      remainingText = remainingText.slice(linesThatFit);
+
+      if (remainingText.length > 0) {
+        doc.addPage();
+        marginTop = 20;
+      }
+    }
+
+    doc.save(`Resumo - ${titulo.substring(0, 20)}...}.pdf`);
+  }
 
   return (
     <div>
@@ -261,6 +299,9 @@ const Resumo = () => {
               <input type="file" accept="image/*" onChange={handleImageUpload} style={{ display: 'none' }} />
               <span>📸 Importar do caderno (foto)</span>
             </label>
+            <button className='botao-exportar' onClick={() => exportarPDF(titulo, desc)} disabled={!titulo.trim() || !desc.trim()}>
+              Exportar PDF
+            </button>
 
             <div style={{ marginTop: '10px', fontSize: '14px', color: '#333' }}>
               <strong><br />Texto ao vivo:</strong>

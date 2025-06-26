@@ -170,3 +170,19 @@ input::placeholder {
   font-weight: bold;
   font-size: 16px;
 }
+
+.botao-exportar {
+  padding: 10px 20px;
+  background-color: #2196F3;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+  font-size: 14px;
+}
+
+.botao-exportar:disabled {
+  background-color: #404040;
+  cursor: not-allowed;
+}

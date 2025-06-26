@@ -3,6 +3,7 @@ import './Flashcard.css';
 import { db } from '../../firebase/config';
 import { collection, addDoc, query, where, onSnapshot, deleteDoc, doc } from 'firebase/firestore';
 import { getAuth } from "firebase/auth";
+import { incrementarContadorEvento } from '../../services/analytics/analyticsEvents';
 
 const Flashcard = () => {
     const [cards, setCards] = useState([]);
@@ -74,6 +75,7 @@ const Flashcard = () => {
                 data: dataFormatada,
                 createdAt: new Date().toISOString()
             });
+            await incrementarContadorEvento(userId, 'flashcards');
 
             // Limpa os campos
             setTitulo("");

@@ -1,0 +1,33 @@
+.score-display {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 15px;
+  background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+  border-radius: 10px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+
+.score-display.animating {
+  transform: scale(1.05);
+  background: linear-gradient(135deg, #f5f7fa 0%, #a8c0ff 100%);
+}
+
+.score-icon {
+  font-size: 2rem;
+  margin-bottom: 5px;
+}
+
+.score-value {
+  font-size: 1.8rem;
+  font-weight: bold;
+  color: #2c3e50;
+}
+
+.score-label {
+  font-size: 0.9rem;
+  color: #7f8c8d;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}

@@ -185,7 +185,6 @@ input::placeholder {
 .botao-exportar:disabled {
   background-color: #404040;
   cursor: not-allowed;
-<<<<<<< feature/busca-resumos
 }
 
 /* Estilos para a barra de busca */
@@ -222,6 +221,5 @@ input::placeholder {
   background-color: rgba(46, 41, 61, 0.7);
   border-radius: 5px;
   margin: 10px 0;
-=======
->>>>>>> develop
+
 }

@@ -1,12 +1,16 @@
+<<<<<<< feature/busca-resumos
 
+=======
+import { jsPDF } from 'jspdf';
+>>>>>>> develop
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { jsPDF } from 'jspdf';
 import { getAuth } from 'firebase/auth';
 import { collection, addDoc, query, getDocs, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove, where} from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import './resumo.css';
-import { incrementarContadorEvento} from '../../services/analytics/analyticsEvents'; 
 import { registrarEvento } from '../../services/analytics/analyticsEvents';
+import { incrementarContadorEvento } from '../../services/analytics/analyticsEvents';
 import { enviarEventoGTM } from '../../services/analytics/gtm';
 import Tesseract from 'tesseract.js';
 

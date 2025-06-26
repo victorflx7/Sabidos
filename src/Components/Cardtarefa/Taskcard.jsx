@@ -18,7 +18,7 @@ const TaskCard = ({ titulo, data, prioridade,status, onStatusChange }) => {
         <div className={`task-card ${prioridadeClasses[prioridade] || ''}`}>
             <div className="task-header">
                 <h3>{titulo}</h3>
-                <span className="task-date">{newDate(data).toLocaleDateString('pt-BR')}</span>
+                <span className="task-date">{new Date(data).toLocaleDateString('pt-BR')}</span>
             </div>
             <div className="task-footer">
             <span className="task-priority">{prioridade}</span>

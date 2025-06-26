@@ -1,57 +1,57 @@
-import React, { useState } from "react";
-import TaskCard from "../Cardtarefa/Taskcard";
-import './Tasklist.css'
+import React from 'react';
+import { useScore } from '../../context/ScoreContext';
+import './Tasklist.css';
 
-const Tasklist = ({ tasks,
-    onTaskUpdate }) => {
-        const [ filter, setFilter] = useState('todas');
+const TaskList = ({ tasks, onTaskUpdate }) => {
+  const { addScore } = useScore();
 
-        const filteredTasks = tasks.filter(task => {
-            if (filter === 'todas') return true;
-            return task.status === filter;
-        });
+  const handleStatusChange = (taskId, currentStatus) => {
+    const newStatus = currentStatus === 'concluida' ? 'pendente' : 'concluida';
+    onTaskUpdate(taskId, { status: newStatus });
 
-        const handleStatusChange = (taskId, newStatus) => {
-            if (onTaskUpdate) {
-                onTaskUpdate(taskId, {
-                    status: newStatus});
-            }
-        };
+    if (newStatus === 'concluida') {
+      addScore(10); 
+    }
+  };
 
-        return(
-            <div className="task-list">
-                <div className="task-filter">
-                    <button className={filter === 'todas' ? 'active' : ""} onClick={() => setFilter('todas')}>
-                        Todas
-                        </button>
-                        <button className={filter === 'pendente' ? 'active' : ""} onClick={() => setFilter('pendente')}>
-                            Pendentes
-                        </button>
-                        <button className={filter === 'concluída' ? 'active' : ""} onClick={() => 
-                            setFilter('concluída')}>
-                                Concluídas
-                         </button>
-                </div>
+  const handlePriorityChange = (taskId, priority) => {
+    onTaskUpdate(taskId, { prioridade: priority });
+  };
 
-                <div className="tasks-container">{filteredTasks.length > 0 ? (filteredTasks.map(task => (
-                    <TaskCard key={task.id}
-                    titulo={task.titulo}
-                    data={task.data}
-                    prioridade={task.prioridade}
-                    status={task.status}
-                    onStatusChange={(newStatus) => 
-                        handleStatusChange(task.id, newStatus)}
-                        />
-                ))
-            ) : (
-                <p className="no-tasks">Nenhuma tarefa encontrada.</p>
-
-            )}
+  return (
+    <div className="tasks-box">
+      {tasks.length > 0 ? (
+        tasks.map((task) => (
+          <div key={task.id} className={`{task-item ${task.prioridade}`}>
+            <div className="task-header">
+              <input
+                type="checkbox"
+                checked={task.status === 'concluida'}
+                onChange={() => handleStatusChange(task.id, task.status)}
+              />
+              <h4 className={`task-title ${task.status === 'concluida' ? 'completed' : ''}`}>
+                {task.titulo}
+              </h4>
             </div>
+            <div className="task-details">
+              <span className="task-date">{task.data}</span>
+              <select
+                value={task.prioridade}
+                onChange={(e) => handlePriorityChange(task.id, e.target.value)}
+                className={`priority-select ${task.prioridade}`}
+              >
+                <option value="alta">Alta</option>
+                <option value="media">Média</option>
+                <option value="baixa">Baixa</option>
+              </select>
             </div>
-        );
-    };
-    
-export default Tasklist;
-            
-                
+          </div>
+        ))
+      ) : (
+        <p>Nenhuma tarefa salva.</p>
+      )}
+    </div>
+  );
+};
+
+export default TaskList;

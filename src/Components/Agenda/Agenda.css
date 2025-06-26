@@ -220,3 +220,21 @@ body {
     text-align: center;
     color: #FBCB4E;
 }
+
+.event-label {
+  background-color: #2E2E8A;
+  color: white;
+  font-size: 12px;
+  padding: 4px;
+  border-radius: 6px;
+  text-align: center;
+  margin-top: 4px;
+  white-space: pre-wrap;
+  max-height: 40px;
+  overflow: hidden;
+}
+
+.day {
+  position: relative;
+  min-height: 80px;
+}

@@ -3,6 +3,7 @@ import './dashboard.css';
 import { Link } from 'react-router-dom';
 import { getAuth } from 'firebase/auth';
 import  FraseDoDia from "../FraseDoDia/FraseDoDia";
+import DashboardProgresso from "../DashboardProgresso/DashboardProgresso"
 
 const Dashboard = () => {
     const auth = getAuth();
@@ -71,6 +72,7 @@ const Dashboard = () => {
 
                 </div>
             </div>
+                    <DashboardProgresso/>
                     <FraseDoDia />
         </>
     )

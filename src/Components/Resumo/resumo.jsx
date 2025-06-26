@@ -1,6 +1,3 @@
-
-import { jsPDF } from 'jspdf';
-
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { jsPDF } from 'jspdf';
 import { getAuth } from 'firebase/auth';

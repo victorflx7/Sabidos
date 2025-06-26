@@ -34,17 +34,6 @@ export const cadastrarUsuario = async (nome, email, senha) => {
   }
 };
 
-export const logoutUsuario = async () => {
-  const auth = getAuth();
-
-  try {
-    await signOut(auth);
-    console.log("Usuário deslogado com sucesso.")
-  } catch (error) {
-    console.error("Erro ao fazer logout:", error)
-  }
-};
-
 export const fazerLogin = async (email, senha) => {
   try {
     await setPersistence(auth, browserLocalPersistence);

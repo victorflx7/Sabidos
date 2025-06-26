@@ -1,7 +1,7 @@
-import { jsPDF } from 'jspdf';
 import React, { useState, useEffect, useRef, useCallback } from 'react';
+import { jsPDF } from 'jspdf';
 import { getAuth } from 'firebase/auth';
-import { collection, addDoc, query, getDocs, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove } from 'firebase/firestore';
+import { collection, addDoc, query, getDocs, doc, updateDoc, deleteDoc, arrayUnion, arrayRemove, where} from 'firebase/firestore';
 import { db } from '../../firebase/config';
 import './resumo.css';
 import { registrarEvento } from '../../services/analytics/analyticsEvents';
@@ -18,7 +18,12 @@ const Resumo = () => {
   const [editando, setEditando] = useState(false);
   const [idEdicao, setIdEdicao] = useState(null);
   const [sucesso, setSucesso] = useState(false);
+
+  const [termoBusca, setTermoBusca] = useState("");
+  const [carregando, setCarregando] = useState(false);
+
   const autosaveTimeout = useRef(null);
+
 
   const auth = getAuth();
   const user = auth.currentUser;
@@ -33,17 +38,43 @@ const Resumo = () => {
   const Desativar = () => setSucesso(false);
 
   useEffect(() => {
-    carregarResumos();
-  }, [uid]);
+    const timer = setTimeout(() => {
+      if(userId) {
+        carregarResumos(termoBusca);
+      }
+    }, 300);
 
-  const carregarResumos = async () => {
+    return () => clearTimeout(timer);
+  }, [userId, termoBusca]);
+
+
+  const carregarResumos = async (termo = "") => {
+    if (!userId) return;
+
+    setCarregando(true);
     try {
-      const q = query(collection(db, "resumos", uid, "dados"));
+      let q;
+      if (termo.trim()) {
+        q = query(
+          collection(db, "resumos"),
+          where("userId", "==", userId),
+          where("tituloLowerCase", ">=", termo.toLowerCase()),
+          where("tituloLowerCase", "<=", termo.toLowerCase() + "\uf8ff")
+        );
+      } else {
+        q = query(collection(db, "resumos"), where("userId", "==", userId));
+      }
+
       const querySnapshot = await getDocs(q);
-      const resumosCarregados = querySnapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+      const resumosCarregados = querySnapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }));
       setResumos(resumosCarregados);
     } catch (error) {
       console.error("Erro ao carregar resumos: ", error);
+    }finally {
+      setCarregando(false);
     }
   };
 
@@ -61,6 +92,7 @@ const Resumo = () => {
         await updateDoc(doc(db, "resumos", uid, "dados", idEdicao), {
 
           titulo,
+          tituloLowerCase: titulo.toLocaleLowerCase(),
           desc,
           data: dataFormatada,
           atualizadoEm: new Date().toISOString()
@@ -77,6 +109,7 @@ const Resumo = () => {
       } else {
         const docRef = await addDoc(collection(db, "resumos", uid, "dados"), {
           titulo,
+          tituloLowerCase: titulo.toLocaleLowerCase(),
           desc,
           data: dataFormatada,
           criadoEm: new Date().toISOString(),
@@ -250,6 +283,14 @@ const Resumo = () => {
       <main>
         <div className='container'>
           <div className="blocoesquerdo">
+            <input 
+              type="text"
+              className='inputBusca'
+              placeholder='Buscar resumos...'
+              value={termoBusca}
+              onChange={(e) => setTermoBusca(e.target.value)}
+            />
+            {carregando && <div className='carregando'>carregando. . .</div>}
             {resumos.map((resumo) => (
               <div className="bloquinho" key={resumo.id}>
                 <h3>{resumo.titulo}</h3>
